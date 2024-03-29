@@ -6,10 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "db:seed": "node -r dotenv/config ./scripts/seed.js",
+    "db:generate-types": "kysely-codegen",
     "db:up": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- up",
     "db:down": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- down",
     "db:migrate": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- latest",
+    "db:seed": "npx ts-node -r dotenv/config --skip-project ./scripts/seed.ts",
     "lint": "next lint"
   },
   "dependencies": {
@@ -42,7 +43,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "tailwindcss": "^3.3.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "prettier": {
