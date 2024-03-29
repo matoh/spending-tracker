@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  postgresql:
+    build: hosting/database/postresql
+    network_mode: host
+    volumes:
+      - postgresql-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: spending_tracker
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+  postgresql-adminer:
+    depends_on:
+      - postgresql
+    build: hosting/database/adminer
+    network_mode: host
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: spending_tracker
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+  # Uncomment to enable starting spending tracker app in docker
+  #  spending-tracker-app:
+  #    build:
+  #      dockerfile: hosting/app/Dockerfile
+  #    network_mode: host
+  #    volumes:
+  #      - ./src:/app/src
+  #      - ./public:/app/public
+  #    environment:
+  #      PORT: 3000
+volumes:
+  postgresql-volume:
+  pgadmin-volume:
