@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fetchExpensesDrizzle } from '@/lib/data';
+import { fetchExpenses } from '@/lib/data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,8 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  // const expenses = await fetchExpenses();
-  const expenses = await fetchExpensesDrizzle();
+  const expenses = await fetchExpenses();
 
   return (
     <div>
@@ -31,7 +30,7 @@ export default async function Page() {
               <TableCell>{expense.cost_sek}</TableCell>
               <TableCell>{expense.category}</TableCell>
               <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.date || ''}</TableCell>
+              <TableCell>{expense.date.toDateString()}</TableCell>
               <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
             </TableRow>
           ))}

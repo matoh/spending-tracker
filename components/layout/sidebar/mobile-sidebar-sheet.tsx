@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon } from '@/components/layout/icon';
 import { sidebarMenuItems } from '@/components/layout/sidebar/sidebar';
 import { Button } from '@/components/ui/button';

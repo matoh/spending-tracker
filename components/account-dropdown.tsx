@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -8,9 +10,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { CircleUser } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { ReactElement } from 'react';
 
 export function AccountDropdown(): ReactElement {
+  const { theme, setTheme } = useTheme();
+  const nextTheme = theme === 'dark' ? 'Light' : 'Dark';
+
   return (
     <div className='flex flex-1 justify-end'>
       <DropdownMenu>
@@ -23,8 +29,7 @@ export function AccountDropdown(): ReactElement {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setTheme(nextTheme.toLowerCase())}>{nextTheme} mode</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
