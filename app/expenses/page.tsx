@@ -1,13 +1,42 @@
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { fetchExpensesDrizzle } from '@/lib/data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Expenses'
 };
 
-export default function Page() {
+export default async function Page() {
+  // const expenses = await fetchExpenses();
+  const expenses = await fetchExpensesDrizzle();
+
   return (
     <div>
       <h2>Expense page</h2>
+      <Table className='mt-4'>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Merchant</TableHead>
+            <TableHead>Cost SEK</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Creation date</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {expenses.map((expense) => (
+            <TableRow key={expense.id}>
+              <TableCell>{expense.merchant}</TableCell>
+              <TableCell>{expense.cost_sek}</TableCell>
+              <TableCell>{expense.category}</TableCell>
+              <TableCell>{expense.description}</TableCell>
+              <TableCell>{expense.date || ''}</TableCell>
+              <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
