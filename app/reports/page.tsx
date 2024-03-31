@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div>
-      <h2>Reports page</h2>
+      <PageTitle text='Reports page' />
     </div>
   );
 }

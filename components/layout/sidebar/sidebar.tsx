@@ -48,7 +48,7 @@ export function Sidebar(): ReactElement {
               <Link
                 key={menuItem.path}
                 href={menuItem.path}
-                className={clsx('flex items-center gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary', {
+                className={clsx('flex items-center gap-3 rounded-lg px-3 py-4 text-muted-foreground transition-all hover:text-primary', {
                   'bg-muted text-primary': pathname === menuItem.path
                 })}
               >

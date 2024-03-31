@@ -3,6 +3,10 @@ import { MobileSidebarSheet } from '@/components/layout/sidebar/mobile-sidebar-s
 import { Sidebar } from '@/components/layout/sidebar/sidebar';
 import { ReactElement, ReactNode } from 'react';
 
+export function PageTitle({ text }: { text: string }): ReactElement {
+  return <h1 className='text-lg font-semibold md:text-2xl'>{text}</h1>;
+}
+
 export function Layout({ children }: { children: ReactNode }): ReactElement {
   return (
     <div className='grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
