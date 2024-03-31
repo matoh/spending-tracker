@@ -16,7 +16,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('base_currency', 'char(3)', (col) => col.notNull())
     .addColumn('input_amount', 'float4', (col) => col.notNull())
     .addColumn('input_currency', 'char(3)', (col) => col.notNull())
-    .addColumn('cost_eur', 'float4', (col) => col.notNull())
     .addColumn('date', 'date', (col) => col.notNull())
     .addColumn('created_at', 'timestamp', (col) => col.defaultTo(sql`NOW()`))
     .execute();
@@ -24,4 +23,5 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('expenses').execute();
+  await db.schema.dropType('category').execute();
 }

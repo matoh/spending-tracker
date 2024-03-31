@@ -5,41 +5,51 @@ export const expenses: Insertable<Expenses>[] = [
   {
     merchant: 'Ikea',
     description: 'PAX Wardrobes With Doors',
-    category: 'materials',
-    cost_sek: 1000,
-    cost_eur: 100,
+    category: 'Materials',
+    base_amount: 1000,
+    base_currency: 'SEK',
+    input_amount: 1000,
+    input_currency: 'SEK',
     date: new Date()
   },
   {
     merchant: 'Ikea',
     description: 'Doors',
-    category: 'materials',
-    cost_sek: 100,
-    cost_eur: 10,
+    category: 'Materials',
+    base_amount: 100,
+    base_currency: 'SEK',
+    input_amount: 10,
+    input_currency: 'EUR',
     date: new Date()
   },
   {
     merchant: 'Ikea',
     description: 'Door handles',
-    category: 'materials',
-    cost_sek: 250,
-    cost_eur: 25,
+    category: 'Materials',
+    base_amount: 500,
+    base_currency: 'SEK',
+    input_amount: 50,
+    input_currency: 'EUR',
     date: new Date()
   },
   {
     merchant: 'Lidl',
     description: 'Gloceries',
-    category: 'meals',
-    cost_sek: 900,
-    cost_eur: 90,
+    category: 'Meals',
+    base_amount: 900,
+    base_currency: 'SEK',
+    input_amount: 90,
+    input_currency: 'EUR',
     date: new Date()
   },
   {
     merchant: 'Biltema',
     description: 'Varmkorv',
-    category: 'meals',
-    cost_sek: 10,
-    cost_eur: 1,
+    category: 'Meals',
+    base_amount: 10,
+    base_currency: 'SEK',
+    input_amount: 10,
+    input_currency: 'SEK',
     date: new Date()
   }
 ];
