@@ -1,6 +1,5 @@
+import { CreateExpense } from '@/components/expenses/create-expense';
 import { PageTitle } from '@/components/layout/layout';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fetchExpenses } from '@/lib/data';
 
@@ -11,20 +10,7 @@ export async function Expenses() {
     <div>
       <div className='flex justify-between'>
         <PageTitle text='Expense page' />
-
-        <Dialog>
-          <DialogTrigger>
-            <Button size='sm'>Create</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your account and remove your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <CreateExpense />
       </div>
 
       <Table className='mt-10'>

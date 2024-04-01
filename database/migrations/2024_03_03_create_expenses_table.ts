@@ -1,9 +1,10 @@
+import { expenseCategories } from '@/types/expense-categories';
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createType('category')
-    .asEnum(['Benefits', 'Car', 'Fees', 'Insurance', 'Materials', 'Meals', 'Professional Services', 'Rent', 'Travel', 'Utilities'])
+    .asEnum([...expenseCategories])
     .execute();
 
   await db.schema
