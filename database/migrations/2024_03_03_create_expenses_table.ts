@@ -1,4 +1,4 @@
-import { expenseCategories } from '@/types/expense-categories';
+import { expenseCategories } from '../../types/expense-categories';
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
@@ -13,8 +13,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('merchant', 'text', (col) => col.notNull())
     .addColumn('description', 'text')
     .addColumn('category', sql`category`, (col) => col.notNull())
-    .addColumn('base_amount', 'float4', (col) => col.notNull())
-    .addColumn('base_currency', 'char(3)', (col) => col.notNull())
+    .addColumn('base_amount', 'float4')
+    .addColumn('base_currency', 'char(3)')
     .addColumn('input_amount', 'float4', (col) => col.notNull())
     .addColumn('input_currency', 'char(3)', (col) => col.notNull())
     .addColumn('date', 'date', (col) => col.notNull())

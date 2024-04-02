@@ -5,31 +5,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { State, createExpense } from '@/lib/actions';
+import { createExpenseTest } from '@/lib/actions';
+import { createExpenseSchema } from '@/lib/schemas/expenses';
 import { expenseCategories } from '@/types/expense-categories';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
-import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Calendar } from '../ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 
-const createExpenseSchema = z.object({
-  merchant: z.string().min(1),
-  date: z.date(),
-  input_amount: z.coerce.number().gt(0),
-  input_currency: z.string().length(3),
-  category: z.enum(expenseCategories),
-  description: z.string().optional()
-});
-
 export function CreateExpense() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const initialState: State = { message: '' };
-  const [state, dispatch] = useFormState(createExpense, initialState);
 
   const form = useForm<z.infer<typeof createExpenseSchema>>({
     resolver: zodResolver(createExpenseSchema),
@@ -43,8 +32,15 @@ export function CreateExpense() {
     }
   });
 
-  function onSubmit(expense: z.infer<typeof createExpenseSchema>) {
-    console.log('Expense:', expense);
+  async function onSubmit(expense: z.infer<typeof createExpenseSchema>) {
+    const response = await createExpenseTest(expense);
+
+    if (response.errors) {
+      Object.keys(response.errors).forEach((fieldId) => {
+        // @ts-ignore TODO: Fix typing
+        form.setError(fieldId, { message: response.errors[fieldId][0] });
+      });
+    }
   }
 
   return (
@@ -58,8 +54,7 @@ export function CreateExpense() {
         </DialogHeader>
 
         <Form {...form}>
-          {/*<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>*/}
-          <form action={dispatch} className='space-y-8'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <FormField
               control={form.control}
               name='merchant'
