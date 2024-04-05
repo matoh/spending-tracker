@@ -2,7 +2,7 @@
 
 import { Icon } from '@/components/layout/icon';
 import { clsx } from 'clsx';
-import { CircleDollarSign, Home, LucideIcon, Package, ShoppingCart, Users } from 'lucide-react';
+import { CircleDollarSign, Home, LucideIcon, Package, ShoppingCart, Users, Delete } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactElement } from 'react';

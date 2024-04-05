@@ -5,8 +5,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { createExpenseTest } from '@/lib/actions';
+import { useToast } from '@/components/ui/use-toast';
+import { createExpense } from '@/lib/actions/expenses';
 import { createExpenseSchema } from '@/lib/schemas/expenses';
+import { setFormErrors } from '@/lib/utils';
 import { expenseCategories } from '@/types/expense-categories';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -17,8 +19,10 @@ import { z } from 'zod';
 import { Calendar } from '../ui/calendar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 
-export function CreateExpense() {
+export function CreateExpenseDialog() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof createExpenseSchema>>({
     resolver: zodResolver(createExpenseSchema),
@@ -27,24 +31,25 @@ export function CreateExpense() {
       date: new Date(),
       input_amount: 0,
       input_currency: 'SEK',
-      category: 'Meals',
+      category: undefined,
       description: ''
     }
   });
 
   async function onSubmit(expense: z.infer<typeof createExpenseSchema>) {
-    const response = await createExpenseTest(expense);
+    const response = await createExpense(expense);
 
-    if (response.errors) {
-      Object.keys(response.errors).forEach((fieldId) => {
-        // @ts-ignore TODO: Fix typing
-        form.setError(fieldId, { message: response.errors[fieldId][0] });
-      });
+    if (response && response.errors) {
+      setFormErrors(response.errors, form);
+    } else {
+      toast({ title: 'Success', description: 'Expense was successfully created' });
+      form.reset();
+      setOpenDialog(false);
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button size='sm'>Create</Button>
       </DialogTrigger>
@@ -52,7 +57,6 @@ export function CreateExpense() {
         <DialogHeader>
           <DialogTitle>New expense</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <FormField

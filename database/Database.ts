@@ -19,7 +19,7 @@ function kyselyConnection() {
       log(event) {
         if (event.level === 'query') {
           // Un-comment to console log all executed queries
-          console.log(event.query.sql);
+          // console.log(event.query.sql);
           // console.log(event.query.parameters);
         }
       }
