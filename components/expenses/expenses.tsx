@@ -1,5 +1,6 @@
 import { CreateExpenseDialog } from '@/components/expenses/create-expense-dialog';
 import { DeleteExpenseDialog } from '@/components/expenses/delete-expense-dialog';
+import { EditExpenseDialog } from '@/components/expenses/edit-expense-dialog';
 import { PageTitle } from '@/components/layout/layout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { fetchExpenses } from '@/lib/data';
@@ -38,7 +39,10 @@ export async function Expenses() {
               <TableCell>{expense.date.toDateString()}</TableCell>
               <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
               <TableCell>
-                <DeleteExpenseDialog expenseId={expense.id} />
+                <div className='flex gap-2'>
+                  <EditExpenseDialog expense={expense} />
+                  <DeleteExpenseDialog expenseId={expense.id} />
+                </div>
               </TableCell>
             </TableRow>
           ))}

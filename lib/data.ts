@@ -6,10 +6,7 @@ export async function fetchExpenses() {
   const db = kyselyConnection();
 
   try {
-    console.log('Fetching expenses data...');
-    const expenses = await db.selectFrom('expenses').selectAll().limit(10).execute();
-
-    return expenses;
+    return await db.selectFrom('expenses').selectAll().limit(10).execute();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data.');

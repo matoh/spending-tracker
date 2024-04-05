@@ -1,24 +1,22 @@
 'use server';
 
 import { kyselyConnection as db } from '@/database/Database';
-import { createExpenseSchema } from '@/lib/schemas/expenses';
+import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
 import { ActionResponse, ActionStatus } from '@/types/action-response';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
 
 /**
  * Create expense from the form data
  * @param formData
  */
-export async function createExpense(formData: z.infer<typeof createExpenseSchema>): Promise<ActionResponse> {
-  const validatedFields = createExpenseSchema.safeParse(formData);
+export async function createExpense(formData: ExpenseSchema): Promise<ActionResponse> {
+  const validatedFields = expenseSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
       status: ActionStatus.ERROR,
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to create Expense.'
+      message: 'Missing Fields. Failed to create expense.'
     };
   }
 
@@ -33,7 +31,43 @@ export async function createExpense(formData: z.infer<typeof createExpenseSchema
   }
 
   revalidatePath('/expenses');
-  redirect('/expenses');
+  return {
+    status: ActionStatus.SUCCESS,
+    message: 'Expense was successfully created'
+  };
+}
+
+/**
+ * Create expense from the form data
+ * @param expenseId
+ * @param formData
+ */
+export async function updateExpense(expenseId: number, formData: ExpenseSchema): Promise<ActionResponse> {
+  const validatedFields = expenseSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return {
+      status: ActionStatus.ERROR,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to update expense.'
+    };
+  }
+
+  try {
+    await db().updateTable('expenses').set(formData).where('id', '=', Number(expenseId)).returningAll().execute();
+  } catch (error) {
+    console.log('Database Error: Failed to update expense.', JSON.stringify(error));
+    return {
+      status: ActionStatus.ERROR,
+      message: 'Failed to update Expense.'
+    };
+  }
+
+  revalidatePath('/expenses');
+  return {
+    status: ActionStatus.SUCCESS,
+    message: 'Expense was successfully updated'
+  };
 }
 
 /**
