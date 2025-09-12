@@ -3,7 +3,7 @@
 import { ExpenseForm } from '@/components/expenses/expense-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { createExpense } from '@/lib/actions/expenses';
 import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
 import { setFormErrors } from '@/lib/utils';

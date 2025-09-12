@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { deleteExpense } from '@/lib/actions/expenses';
 import { Trash2 } from 'lucide-react';
 
