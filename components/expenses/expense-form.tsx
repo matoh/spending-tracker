@@ -21,7 +21,7 @@ export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
         <FormField
           control={form.control}
           name='merchant'
@@ -41,7 +41,7 @@ export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
           name='date'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date</FormLabel>
+              <FormLabel htmlFor={undefined}>Date</FormLabel>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button variant='outline' className='w-full justify-start text-left font-normal'>
@@ -131,7 +131,7 @@ export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
           )}
         />
 
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>Create</Button>
       </form>
     </Form>
   );

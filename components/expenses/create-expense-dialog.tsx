@@ -44,9 +44,9 @@ export function CreateExpenseDialog() {
       <DialogTrigger asChild>
         <Button size='sm'>Create</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>New expense</DialogTitle>
+          <DialogTitle className='mb-4'>New expense</DialogTitle>
         </DialogHeader>
         <ExpenseForm form={form} onSubmit={onSubmit} />
       </DialogContent>
