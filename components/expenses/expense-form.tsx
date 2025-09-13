@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ExpenseSchema } from '@/lib/schemas/expenses';
 import { expenseCategories } from '@/types/expense-categories';
+import { ExpenseCurrencies } from '@/types/expense-currencies';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -84,9 +85,20 @@ export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Currency</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder='Choose currency' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {ExpenseCurrencies.map((currency) => (
+                    <SelectItem key={currency} value={currency}>
+                      {currency}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

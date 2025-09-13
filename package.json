@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "db:generate-types": "kysely-codegen",
-    "db:up": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- up",
-    "db:down": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- down",
-    "db:migrate": "npx ts-node -r dotenv/config --skip-project ./scripts/migrate.ts -- latest",
-    "db:seed": "npx ts-node -r dotenv/config --skip-project ./scripts/seed.ts",
+    "db:up": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/migrate.ts -- up",
+    "db:down": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/migrate.ts -- down",
+    "db:migrate": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/migrate.ts -- latest",
+    "db:seed": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/seed.ts",
     "shadcn:add": "npx shadcn-ui@latest add",
     "lint": "next lint"
   },
@@ -56,7 +56,9 @@
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^4.2.0",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2"
   },
   "prettier": {
     "singleQuote": true,
