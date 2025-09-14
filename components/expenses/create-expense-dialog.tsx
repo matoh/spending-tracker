@@ -48,7 +48,7 @@ export function CreateExpenseDialog() {
         <DialogHeader>
           <DialogTitle className='mb-4'>New expense</DialogTitle>
         </DialogHeader>
-        <ExpenseForm form={form} onSubmit={onSubmit} />
+        <ExpenseForm form={form} onSubmit={onSubmit} action='create' />
       </DialogContent>
     </Dialog>
   );

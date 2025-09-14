@@ -15,9 +15,10 @@ import { UseFormReturn } from 'react-hook-form';
 interface ExpenseFormProps {
   form: UseFormReturn<ExpenseSchema>;
   onSubmit: (expense: ExpenseSchema) => void;
+  action: 'create' | 'edit';
 }
 
-export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
+export function ExpenseForm({ form, onSubmit, action }: ExpenseFormProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   return (
@@ -143,7 +144,7 @@ export function ExpenseForm({ form, onSubmit }: ExpenseFormProps) {
           )}
         />
 
-        <Button type='submit'>Create</Button>
+        <Button type='submit'>{action === 'create' ? 'Create' : 'Update'}</Button>
       </form>
     </Form>
   );

@@ -54,7 +54,7 @@ export function EditExpenseDialog({ expense }: { expense: Selectable<Expenses> }
         <DialogHeader>
           <DialogTitle>Update expense</DialogTitle>
         </DialogHeader>
-        <ExpenseForm form={form} onSubmit={onSubmit} />
+        <ExpenseForm form={form} onSubmit={onSubmit} action='edit' />
       </DialogContent>
     </Dialog>
   );
