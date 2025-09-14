@@ -1,5 +1,7 @@
 import { kyselyConnection } from '@/database/Database';
 import { unstable_noStore as noStore } from 'next/cache';
+import { Selectable } from 'kysely';
+import { Reports } from 'kysely-codegen/dist/db';
 
 export async function fetchExpenses() {
   noStore();
@@ -13,7 +15,7 @@ export async function fetchExpenses() {
   }
 }
 
-export async function fetchReports() {
+export async function fetchReports(): Promise<Selectable<Reports>[]> {
   noStore();
   const db = kyselyConnection();
 

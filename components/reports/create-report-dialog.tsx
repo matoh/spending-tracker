@@ -16,7 +16,8 @@ export function CreateReportDialog() {
   const form = useForm<ReportSchema>({
     resolver: zodResolver(reportSchema),
     defaultValues: {
-      name: ''
+      name: '',
+      status: 'open'
     }
   });
 

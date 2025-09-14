@@ -6,12 +6,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useFormSubmission } from '@/hooks/use-form-submission';
 import { updateReport } from '@/lib/actions/reports';
 import { ReportSchema, reportSchema } from '@/lib/schemas/reports';
-import { setFormErrors } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
 import { Edit } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
@@ -21,7 +20,8 @@ export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
   const form = useForm<ReportSchema>({
     resolver: zodResolver(reportSchema),
     defaultValues: {
-      name: report.name
+      name: report.name,
+      status: report.status
     }
   });
 
@@ -32,6 +32,16 @@ export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
     handleSubmission(response);
   }
 
+  // Reset form when dialog closes
+  useEffect(() => {
+    if (!openDialog) {
+      form.reset({
+        name: report.name,
+        status: report.status
+      });
+    }
+  }, [openDialog, form]);
+
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
@@ -39,7 +49,7 @@ export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
           <Edit />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Update report</DialogTitle>
         </DialogHeader>

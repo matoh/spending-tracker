@@ -1,6 +1,7 @@
 import { CreateReportDialog } from '@/components/reports/create-report-dialog';
 import { DeleteReportDialog } from '@/components/reports/delete-report-dialog';
 import { EditReportDialog } from '@/components/reports/edit-report-dialog';
+import { StatusBadge } from '@/components/reports/status-badge';
 import { EmptyState } from '../layout/empty-state';
 import { PageTitle } from '../layout/layout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
@@ -28,7 +29,7 @@ export async function Reports() {
               <TableHead>Name</TableHead>
               <TableHead>Total amount</TableHead>
               <TableHead>Total currency</TableHead>
-              {/* <TableHead>Status</TableHead> */}
+              <TableHead>Status</TableHead>
               <TableHead>Creation date</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -39,7 +40,9 @@ export async function Reports() {
                 <TableCell>{report.name}</TableCell>
                 <TableCell>{report.total_amount}</TableCell>
                 <TableCell>{report.total_currency}</TableCell>
-                {/* <TableCell>{report.status}</TableCell> */}
+                <TableCell>
+                  <StatusBadge status={report.status as 'open' | 'closed'} />
+                </TableCell>
                 <TableCell>{report.created_at ? report.created_at.toDateString() : ''}</TableCell>
                 <TableCell>
                   <div className='flex gap-2'>

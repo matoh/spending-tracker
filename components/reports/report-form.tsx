@@ -3,7 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ReportSchema } from '@/lib/schemas/reports';
-import { ExpenseCurrencies } from '@/types/expense-currencies';
+import { ReportStatus } from '@/types/report-status';
 import { UseFormReturn } from 'react-hook-form';
 
 interface ReportFormProps {
@@ -25,6 +25,31 @@ export function ReportForm({ form, onSubmit, action }: ReportFormProps) {
               <FormControl>
                 <Input placeholder='Report name' {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='status'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select status' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {ReportStatus.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

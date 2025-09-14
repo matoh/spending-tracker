@@ -42,7 +42,7 @@ export function EditExpenseDialog({ expense }: { expense: Selectable<Expenses> }
           <Edit />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Update expense</DialogTitle>
         </DialogHeader>
