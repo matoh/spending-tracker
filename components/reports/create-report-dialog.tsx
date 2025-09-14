@@ -1,34 +1,29 @@
 'use client';
 
-import { ExpenseForm } from '@/components/expenses/expense-form';
+import { ReportForm } from '@/components/reports/report-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useFormSubmission } from '@/hooks/use-form-submission';
-import { createExpense } from '@/lib/actions/expenses';
-import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
+import { createReport } from '@/lib/actions/reports';
+import { ReportSchema, reportSchema } from '@/lib/schemas/reports';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export function CreateExpenseDialog() {
+export function CreateReportDialog() {
   const [openDialog, setOpenDialog] = useState(false);
 
-  const form = useForm<ExpenseSchema>({
-    resolver: zodResolver(expenseSchema),
+  const form = useForm<ReportSchema>({
+    resolver: zodResolver(reportSchema),
     defaultValues: {
-      merchant: '',
-      date: new Date(),
-      input_amount: 0,
-      input_currency: 'SEK',
-      category: undefined,
-      description: ''
+      name: ''
     }
   });
 
   const handleSubmission = useFormSubmission(form, setOpenDialog);
 
-  async function onSubmit(expense: ExpenseSchema) {
-    const response = await createExpense(expense);
+  async function onSubmit(report: ReportSchema) {
+    const response = await createReport(report);
     handleSubmission(response);
   }
 
@@ -39,9 +34,9 @@ export function CreateExpenseDialog() {
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className='mb-4'>New expense</DialogTitle>
+          <DialogTitle className='mb-4'>New report</DialogTitle>
         </DialogHeader>
-        <ExpenseForm form={form} onSubmit={onSubmit} action='create' />
+        <ReportForm form={form} onSubmit={onSubmit} action='create' />
       </DialogContent>
     </Dialog>
   );

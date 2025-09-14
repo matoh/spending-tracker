@@ -6,9 +6,21 @@ export async function fetchExpenses() {
   const db = kyselyConnection();
 
   try {
-    return await db.selectFrom('expenses').selectAll().limit(10).execute();
+    return await db.selectFrom('expenses').selectAll().limit(100).execute();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data.');
+  }
+}
+
+export async function fetchReports() {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    return await db.selectFrom('reports').selectAll().orderBy('name', 'desc').execute();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch reports data.');
   }
 }
