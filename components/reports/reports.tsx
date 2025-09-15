@@ -38,10 +38,10 @@ export async function Reports() {
             {reports.map((report) => (
               <TableRow key={report.name}>
                 <TableCell>{report.name}</TableCell>
-                <TableCell>{report.total_amount}</TableCell>
-                <TableCell>{report.total_currency}</TableCell>
+                <TableCell>{report.total_amount || 0}</TableCell>
+                <TableCell>{report.total_currency || 'SEK'}</TableCell>
                 <TableCell>
-                  <StatusBadge status={report.status as 'open' | 'closed'} />
+                  <StatusBadge status={report.status} />
                 </TableCell>
                 <TableCell>{report.created_at ? report.created_at.toDateString() : ''}</TableCell>
                 <TableCell>

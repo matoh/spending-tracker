@@ -7,22 +7,24 @@ import { useFormSubmission } from '@/hooks/use-form-submission';
 import { createExpense } from '@/lib/actions/expenses';
 import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export function CreateExpenseDialog() {
   const [openDialog, setOpenDialog] = useState(false);
 
+  const defaultValues = useMemo(() => ({
+    merchant: '',
+    date: new Date(),
+    input_amount: 0,
+    input_currency: 'SEK' as const,
+    category: undefined,
+    description: ''
+  }), []);
+
   const form = useForm<ExpenseSchema>({
     resolver: zodResolver(expenseSchema),
-    defaultValues: {
-      merchant: '',
-      date: new Date(),
-      input_amount: 0,
-      input_currency: 'SEK',
-      category: undefined,
-      description: ''
-    }
+    defaultValues
   });
 
   const handleSubmission = useFormSubmission(form, setOpenDialog);

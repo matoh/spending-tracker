@@ -4,25 +4,28 @@ import { ReportForm } from '@/components/reports/report-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useFormSubmission } from '@/hooks/use-form-submission';
+import { useDialogOnCloseFormReset } from '@/hooks/use-dialog-form-reset';
 import { updateReport } from '@/lib/actions/reports';
 import { ReportSchema, reportSchema } from '@/lib/schemas/reports';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
 import { Edit } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
   const updateReportWithId = updateReport.bind(null, report.id);
   const [openDialog, setOpenDialog] = useState(false);
 
+  const defaultValues = useMemo(() => ({
+    name: report.name,
+    status: report.status
+  }), [report.name, report.status]);
+
   const form = useForm<ReportSchema>({
     resolver: zodResolver(reportSchema),
-    defaultValues: {
-      name: report.name,
-      status: report.status
-    }
+    defaultValues
   });
 
   const handleSubmission = useFormSubmission(form, setOpenDialog);
@@ -33,14 +36,11 @@ export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
   }
 
   // Reset form when dialog closes
-  useEffect(() => {
-    if (!openDialog) {
-      form.reset({
-        name: report.name,
-        status: report.status
-      });
-    }
-  }, [openDialog, form]);
+  useDialogOnCloseFormReset({
+    openDialog,
+    form,
+    resetValues: defaultValues
+  });
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
