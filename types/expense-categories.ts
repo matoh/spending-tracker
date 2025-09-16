@@ -1,4 +1,4 @@
-export const expenseCategories = [
+export const ExpenseCategories = [
   'Benefits',
   'Car',
   'Fees',

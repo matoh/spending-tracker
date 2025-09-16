@@ -21,19 +21,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     }
   };
 
-  const getStatusColor = (status: ReportStatusType) => {
-    switch (status) {
-      case 'open':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'closed':
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-      default:
-        return '';
-    }
-  };
-
   return (
-    <Badge variant={getStatusVariant(status)} className={cn(getStatusColor(status), className)}>
+    <Badge variant={getStatusVariant(status)} className={cn(className)}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </Badge>
   );

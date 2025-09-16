@@ -1,4 +1,3 @@
-import { expenseCategories } from '../../types/expense-categories';
 import { ReportStatus } from '../../types/report-status';
 import { Kysely, sql } from 'kysely';
 

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ExpenseSchema } from '@/lib/schemas/expenses';
-import { expenseCategories } from '@/types/expense-categories';
+import { ExpenseCategories } from '@/types/expense-categories';
 import { ExpenseCurrencies } from '@/types/expense-currencies';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -118,7 +118,7 @@ export function ExpenseForm({ form, onSubmit, action }: ExpenseFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {expenseCategories.map((expenseCategory) => (
+                  {ExpenseCategories.map((expenseCategory) => (
                     <SelectItem key={expenseCategory} value={expenseCategory}>
                       {expenseCategory}
                     </SelectItem>

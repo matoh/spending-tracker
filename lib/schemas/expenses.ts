@@ -1,4 +1,4 @@
-import { expenseCategories } from '@/types/expense-categories';
+import { ExpenseCategories } from '@/types/expense-categories';
 import { ExpenseCurrencies } from '@/types/expense-currencies';
 import { z } from 'zod';
 
@@ -9,7 +9,7 @@ export const expenseSchema = z.object({
   input_currency: z.enum(ExpenseCurrencies),
   base_currency: z.enum(ExpenseCurrencies).nullable().optional(),
   base_amount: z.number().nullable().optional(),
-  category: z.enum(expenseCategories),
+  category: z.enum(ExpenseCategories),
   description: z.string().optional()
 });
 
