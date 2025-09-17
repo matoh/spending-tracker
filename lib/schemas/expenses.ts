@@ -10,7 +10,8 @@ export const expenseSchema = z.object({
   base_currency: z.enum(ExpenseCurrencies).nullable().optional(),
   base_amount: z.number().nullable().optional(),
   category: z.enum(ExpenseCategories),
-  description: z.string().optional()
+  description: z.string().optional(),
+  report_id: z.number().optional()
 });
 
 export type ExpenseSchema = z.infer<typeof expenseSchema>;

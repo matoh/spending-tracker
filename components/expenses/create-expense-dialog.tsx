@@ -11,8 +11,11 @@ import { ExpenseCategories } from '@/types/expense-categories';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Selectable } from 'kysely';
+import { Reports } from 'kysely-codegen/dist/db';
 
-export function CreateExpenseDialog() {
+export function CreateExpenseDialog({ reports }: { reports: Selectable<Reports>[] }) {
+
   const [openDialog, setOpenDialog] = useState(false);
 
   const defaultValues = useMemo(
@@ -22,7 +25,8 @@ export function CreateExpenseDialog() {
       input_amount: 0,
       input_currency: 'SEK' as const,
       category: '' as (typeof ExpenseCategories)[number], // Empty string to show as unselected in UI
-      description: ''
+      description: '',
+      report_id: reports[0]?.id
     }),
     []
   );
@@ -54,7 +58,7 @@ export function CreateExpenseDialog() {
         <DialogHeader>
           <DialogTitle className='mb-4'>New expense</DialogTitle>
         </DialogHeader>
-        <ExpenseForm form={form} onSubmit={onSubmit} action='create' />
+        <ExpenseForm form={form} onSubmit={onSubmit} action='create' reports={reports} />
       </DialogContent>
     </Dialog>
   );

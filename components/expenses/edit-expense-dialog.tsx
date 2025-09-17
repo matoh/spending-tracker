@@ -9,12 +9,12 @@ import { updateExpense } from '@/lib/actions/expenses';
 import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Selectable } from 'kysely';
-import { Expenses } from 'kysely-codegen/dist/db';
+import { Expenses, Reports } from 'kysely-codegen/dist/db';
 import { Edit } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export function EditExpenseDialog({ expense }: { expense: Selectable<Expenses> }) {
+export function EditExpenseDialog({ expense, reports }: { expense: Selectable<Expenses>; reports: Selectable<Reports>[] }) {
   const updateExpenseWithId = updateExpense.bind(null, expense.id);
   const [openDialog, setOpenDialog] = useState(false);
   const defaultValues = useMemo(
@@ -24,7 +24,8 @@ export function EditExpenseDialog({ expense }: { expense: Selectable<Expenses> }
       input_amount: expense.input_amount,
       input_currency: expense.input_currency,
       category: expense.category,
-      description: expense.description || ''
+      description: expense.description || '',
+      report_id: (expense as any).report_id || undefined
     }),
     [expense]
   );
@@ -57,8 +58,9 @@ export function EditExpenseDialog({ expense }: { expense: Selectable<Expenses> }
         <DialogHeader>
           <DialogTitle>Update expense</DialogTitle>
         </DialogHeader>
-        <ExpenseForm form={form} onSubmit={onSubmit} action='edit' />
+        <ExpenseForm form={form} onSubmit={onSubmit} action='edit' reports={reports} />
       </DialogContent>
     </Dialog>
   );
 }
+

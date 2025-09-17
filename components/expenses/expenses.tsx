@@ -1,26 +1,29 @@
-import { CreateExpenseDialog } from '@/components/expenses/create-expense-dialog';
 import { DeleteExpenseDialog } from '@/components/expenses/delete-expense-dialog';
 import { EditExpenseDialog } from '@/components/expenses/edit-expense-dialog';
 import { EmptyState } from '@/components/layout/empty-state';
 import { PageTitle } from '@/components/layout/layout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fetchExpenses } from '@/lib/data';
+import { fetchExpenses, fetchReports } from '@/lib/data';
+import { CreateExpenseDialog } from './create-expense-dialog';
 
 export async function Expenses() {
-  const expenses = await fetchExpenses();
+  const [expenses, reports] = await Promise.all([fetchExpenses(), fetchReports()]);
+  
+  // Create a map of report IDs to report names for quick lookup
+  const reportMap = new Map(reports.map(report => [report.id, report.name]));
 
   return (
     <div>
       <div className='flex justify-between'>
         <PageTitle text='Expenses' />
-        {expenses.length !== 0 && <CreateExpenseDialog />}
+        {expenses.length !== 0 && <CreateExpenseDialog reports={reports} />}
       </div>
 
       {expenses.length === 0 ? (
         <EmptyState
           title='No expenses yet'
           description="Start tracking your spending by adding your first expense. It's easy to get started!"
-          action={<CreateExpenseDialog />}
+          action={<CreateExpenseDialog reports={reports} />}
         />
       ) : (
         <Table className='mt-10'>
@@ -31,6 +34,7 @@ export async function Expenses() {
               <TableHead>Input currency</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
+              <TableHead>Report</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Creation date</TableHead>
               <TableHead>Actions</TableHead>
@@ -44,11 +48,13 @@ export async function Expenses() {
                 <TableCell>{expense.input_currency}</TableCell>
                 <TableCell>{expense.category}</TableCell>
                 <TableCell>{expense.description}</TableCell>
+                {/* TODO: Fix typing */}
+                <TableCell>{reportMap.get((expense as any).report_id) || 'No report'}</TableCell>
                 <TableCell>{expense.date.toDateString()}</TableCell>
                 <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
                 <TableCell>
                   <div className='flex gap-2'>
-                    <EditExpenseDialog expense={expense} />
+                    <EditExpenseDialog expense={expense} reports={reports} />
                     <DeleteExpenseDialog expenseId={expense.id} />
                   </div>
                 </TableCell>

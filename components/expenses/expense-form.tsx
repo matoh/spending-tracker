@@ -11,14 +11,17 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { Selectable } from 'kysely';
+import { Reports } from 'kysely-codegen/dist/db';
 
 interface ExpenseFormProps {
   form: UseFormReturn<ExpenseSchema>;
   onSubmit: (expense: ExpenseSchema) => void;
   action: 'create' | 'edit';
+  reports: Selectable<Reports>[];
 }
 
-export function ExpenseForm({ form, onSubmit, action }: ExpenseFormProps) {
+export function ExpenseForm({ form, onSubmit, action, reports }: ExpenseFormProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   return (
@@ -139,6 +142,31 @@ export function ExpenseForm({ form, onSubmit, action }: ExpenseFormProps) {
               <FormControl>
                 <Input placeholder='Short description' {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='report_id'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Report (Optional)</FormLabel>
+              <Select onValueChange={(value) => field.onChange(value ? Number(value) : undefined)} value={field.value?.toString()}>
+                <FormControl>
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder='Choose report' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {reports.map((report) => (
+                    <SelectItem key={report.id} value={report.id.toString()}>
+                      {report.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
