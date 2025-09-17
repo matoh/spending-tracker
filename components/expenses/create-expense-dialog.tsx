@@ -24,6 +24,8 @@ export function CreateExpenseDialog({ reports }: { reports: Selectable<Reports>[
       date: new Date(),
       input_amount: 0,
       input_currency: 'SEK' as const,
+      base_amount: 0,
+      base_currency: 'SEK' as const,
       category: '' as (typeof ExpenseCategories)[number], // Empty string to show as unselected in UI
       description: '',
       report_id: reports[0]?.id

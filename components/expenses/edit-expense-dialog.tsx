@@ -23,6 +23,8 @@ export function EditExpenseDialog({ expense, reports }: { expense: Selectable<Ex
       date: expense.date ? new Date(expense.date) : new Date(),
       input_amount: expense.input_amount,
       input_currency: expense.input_currency,
+      base_amount: expense.base_amount,
+      base_currency: expense.base_currency,
       category: expense.category,
       description: expense.description || '',
       report_id: (expense as any).report_id || undefined

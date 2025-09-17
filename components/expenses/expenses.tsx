@@ -8,22 +8,24 @@ import { CreateExpenseDialog } from './create-expense-dialog';
 
 export async function Expenses() {
   const [expenses, reports] = await Promise.all([fetchExpenses(), fetchReports()]);
-  
+
+  const openReports = reports.filter((report) => report.status === 'open');
+
   // Create a map of report IDs to report names for quick lookup
-  const reportMap = new Map(reports.map(report => [report.id, report.name]));
+  const reportMap = new Map(reports.map((report) => [report.id, report.name]));
 
   return (
     <div>
       <div className='flex justify-between'>
         <PageTitle text='Expenses' />
-        {expenses.length !== 0 && <CreateExpenseDialog reports={reports} />}
+        {expenses.length !== 0 && <CreateExpenseDialog reports={openReports} />}
       </div>
 
       {expenses.length === 0 ? (
         <EmptyState
           title='No expenses yet'
           description="Start tracking your spending by adding your first expense. It's easy to get started!"
-          action={<CreateExpenseDialog reports={reports} />}
+          action={<CreateExpenseDialog reports={openReports} />}
         />
       ) : (
         <Table className='mt-10'>
@@ -47,14 +49,14 @@ export async function Expenses() {
                 <TableCell>{expense.input_amount}</TableCell>
                 <TableCell>{expense.input_currency}</TableCell>
                 <TableCell>{expense.category}</TableCell>
-                <TableCell>{expense.description}</TableCell>
+                <TableCell>{expense.description || '-'}</TableCell>
                 {/* TODO: Fix typing */}
                 <TableCell>{reportMap.get((expense as any).report_id) || 'No report'}</TableCell>
                 <TableCell>{expense.date.toDateString()}</TableCell>
                 <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
                 <TableCell>
                   <div className='flex gap-2'>
-                    <EditExpenseDialog expense={expense} reports={reports} />
+                    <EditExpenseDialog expense={expense} reports={openReports} />
                     <DeleteExpenseDialog expenseId={expense.id} />
                   </div>
                 </TableCell>

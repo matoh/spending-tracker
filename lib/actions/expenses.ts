@@ -4,6 +4,7 @@ import { kyselyConnection as db } from '@/database/Database';
 import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
 import { ActionResponse, ActionStatus } from '@/types/action-response';
 import { revalidatePath } from 'next/cache';
+import { convertCurrency } from '@/lib/services/exchange-rate';
 
 /**
  * Create expense from the form data
@@ -20,8 +21,26 @@ export async function createExpense(formData: ExpenseSchema): Promise<ActionResp
     };
   }
 
+  const { input_amount, input_currency } = validatedFields.data;
+  const base_currency = 'SEK';
+
   try {
-    await db().insertInto('expenses').values(formData).returningAll().execute();
+    const conversion = await convertCurrency(input_amount, input_currency, base_currency);
+    
+    if (!conversion) {
+      return {
+        status: ActionStatus.ERROR,
+        message: 'Failed to convert currency. Please try again later.'
+      };
+    }
+
+    const expenseData = {
+      ...validatedFields.data,
+      base_currency: base_currency as 'SEK',
+      base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
+    };
+
+    await db().insertInto('expenses').values(expenseData).returningAll().execute();
   } catch (error) {
     console.log('Database Error: Failed to create expense.', JSON.stringify(error));
     return {
@@ -53,8 +72,26 @@ export async function updateExpense(expenseId: number, formData: ExpenseSchema):
     };
   }
 
+  const { input_amount, input_currency } = validatedFields.data;
+  const base_currency = 'SEK'; // Hardcoded as requested
+
   try {
-    await db().updateTable('expenses').set(formData).where('id', '=', Number(expenseId)).returningAll().execute();
+    const conversion = await convertCurrency(input_amount, input_currency, base_currency);
+    
+    if (!conversion) {
+      return {
+        status: ActionStatus.ERROR,
+        message: 'Failed to convert currency. Please try again later.'
+      };
+    }
+
+    const expenseData = {
+      ...validatedFields.data,
+      base_currency: base_currency as 'SEK',
+      base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
+    };
+
+    await db().updateTable('expenses').set(expenseData).where('id', '=', Number(expenseId)).returningAll().execute();
   } catch (error) {
     console.log('Database Error: Failed to update expense.', JSON.stringify(error));
     return {

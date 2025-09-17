@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { fetchReports } from '@/lib/data';
 
 export async function Reports() {
-  const reports = await fetchReports();
+  const [reports] = await Promise.all([fetchReports()]);
 
   return (
     <div>
@@ -28,7 +28,6 @@ export async function Reports() {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Total amount</TableHead>
-              <TableHead>Total currency</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Creation date</TableHead>
               <TableHead>Actions</TableHead>
@@ -38,8 +37,7 @@ export async function Reports() {
             {reports.map((report) => (
               <TableRow key={report.name}>
                 <TableCell>{report.name}</TableCell>
-                <TableCell>{report.total_amount || 0}</TableCell>
-                <TableCell>{report.total_currency || 'SEK'}</TableCell>
+                <TableCell>{report.total_amount || 0} SEK</TableCell>
                 <TableCell>
                   <StatusBadge status={report.status} />
                 </TableCell>
