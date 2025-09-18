@@ -27,7 +27,7 @@ export function DeleteDialog({ id, itemType, onDelete }: DeleteDialogProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='ghost' size='sm'>
+        <Button variant='ghost' size='sm' className='cursor-pointer' title='Delete'>
           <Trash2 />
         </Button>
       </AlertDialogTrigger>

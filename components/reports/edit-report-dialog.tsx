@@ -45,7 +45,7 @@ export function EditReportDialog({ report }: { report: Selectable<Reports> }) {
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button variant='ghost' size='sm'>
+        <Button variant='ghost' size='sm' className='cursor-pointer' title='Edit'>
           <Edit />
         </Button>
       </DialogTrigger>

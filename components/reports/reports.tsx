@@ -2,11 +2,14 @@ import { CreateReportDialog } from '@/components/reports/create-report-dialog';
 import { DeleteReportDialog } from '@/components/reports/delete-report-dialog';
 import { EditReportDialog } from '@/components/reports/edit-report-dialog';
 import { StatusBadge } from '@/components/reports/status-badge';
+import { BASE_CURRENCY } from '@/lib/constants';
+import { fetchReports } from '@/lib/data';
+import { NotebookText } from 'lucide-react';
+import Link from 'next/link';
 import { EmptyState } from '../layout/empty-state';
 import { PageTitle } from '../layout/layout';
+import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
-import { fetchReports } from '@/lib/data';
-import { BASE_CURRENCY } from '@/lib/constants';
 
 export async function Reports() {
   const [reports] = await Promise.all([fetchReports()]);
@@ -36,20 +39,27 @@ export async function Reports() {
           </TableHeader>
           <TableBody>
             {reports.map((report) => (
-              <TableRow key={report.name}>
-                <TableCell>{report.name}</TableCell>
-                <TableCell>{report.total_amount || 0} {BASE_CURRENCY}</TableCell>
-                <TableCell>
-                  <StatusBadge status={report.status} />
-                </TableCell>
-                <TableCell>{report.created_at ? report.created_at.toDateString() : ''}</TableCell>
-                <TableCell>
-                  <div className='flex gap-2'>
-                    <EditReportDialog report={report} />
-                    <DeleteReportDialog reportId={report.id} />
-                  </div>
-                </TableCell>
-              </TableRow>
+                <TableRow key={report.name}>
+                  <TableCell>{report.name}</TableCell>
+                  <TableCell>
+                    {report.total_amount || 0} {BASE_CURRENCY}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={report.status} />
+                  </TableCell>
+                  <TableCell>{report.created_at ? report.created_at.toDateString() : ''}</TableCell>
+                  <TableCell>
+                    <div className='flex gap-2'>
+                      <Link href={`/reports/${report.id}`}>
+                        <Button variant='ghost' size='sm' className='cursor-pointer' title='View Expenses'>
+                          <NotebookText />
+                        </Button>
+                      </Link>
+                      <EditReportDialog report={report} />
+                      <DeleteReportDialog reportId={report.id} />
+                    </div>
+                  </TableCell>
+                </TableRow>
             ))}
           </TableBody>
         </Table>

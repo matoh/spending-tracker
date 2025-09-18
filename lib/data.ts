@@ -22,7 +22,9 @@ export async function fetchExpenses(reportId?: number) {
   }
 }
 
-export async function fetchReports(status?: typeof ReportStatus): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
+export async function fetchReports(
+  status?: typeof ReportStatus
+): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
   noStore();
   const db = kyselyConnection();
 
@@ -30,13 +32,7 @@ export async function fetchReports(status?: typeof ReportStatus): Promise<(Selec
     let query = db
       .selectFrom('reports')
       .leftJoin('expenses', 'expenses.report_id', 'reports.id')
-      .select([
-        'reports.id',
-        'reports.name',
-        'reports.status',
-        'reports.created_at',
-        db.fn.sum('expenses.base_amount').as('total_amount')
-      ])
+      .select(['reports.id', 'reports.name', 'reports.status', 'reports.created_at', db.fn.sum('expenses.base_amount').as('total_amount')])
       .groupBy(['reports.id', 'reports.name', 'reports.status', 'reports.created_at']);
 
     if (status) {
@@ -47,5 +43,32 @@ export async function fetchReports(status?: typeof ReportStatus): Promise<(Selec
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch reports data.');
+  }
+}
+
+export async function fetchReport(reportId: number): Promise<(Selectable<Reports> & { total_amount: number }) | undefined> {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    const report = await db
+      .selectFrom('reports')
+      .leftJoin('expenses', 'expenses.report_id', 'reports.id')
+      .select(['reports.id', 'reports.name', 'reports.status', 'reports.created_at', db.fn.sum('expenses.base_amount').as('total_amount')])
+      .where('reports.id', '=', reportId)
+      .groupBy(['reports.id', 'reports.name', 'reports.status', 'reports.created_at'])
+      .executeTakeFirst();
+
+    if (!report) {
+      return undefined;
+    }
+
+    return {
+      ...report,
+      total_amount: Number(report.total_amount) || 0
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch report data.');
   }
 }
