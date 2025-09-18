@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('expenses')
     .addColumn('id', 'serial', (col) => col.primaryKey())
-    .addColumn('report_id', 'integer')
+    .addColumn('report_id', 'integer', (col) => col.notNull())
     .addColumn('merchant', 'text', (col) => col.notNull())
     .addColumn('description', 'text')
     .addColumn('category', sql`category`, (col) => col.notNull())

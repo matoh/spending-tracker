@@ -11,7 +11,7 @@ export const expenseSchema = z.object({
   base_amount: z.number(),
   category: z.enum(ExpenseCategories),
   description: z.string().optional(),
-  report_id: z.number().optional()
+  report_id: z.number()
 });
 
 export type ExpenseSchema = z.infer<typeof expenseSchema>;

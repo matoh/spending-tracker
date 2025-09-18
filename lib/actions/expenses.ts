@@ -2,9 +2,10 @@
 
 import { kyselyConnection as db } from '@/database/Database';
 import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
+import { convertCurrency } from '@/lib/services/exchange-rate';
 import { ActionResponse, ActionStatus } from '@/types/action-response';
 import { revalidatePath } from 'next/cache';
-import { convertCurrency } from '@/lib/services/exchange-rate';
+import { BASE_CURRENCY } from '../constants';
 
 /**
  * Create expense from the form data
@@ -22,11 +23,9 @@ export async function createExpense(formData: ExpenseSchema): Promise<ActionResp
   }
 
   const { input_amount, input_currency } = validatedFields.data;
-  const base_currency = 'SEK';
-
   try {
-    const conversion = await convertCurrency(input_amount, input_currency, base_currency);
-    
+    const conversion = await convertCurrency(input_amount, input_currency, BASE_CURRENCY);
+
     if (!conversion) {
       return {
         status: ActionStatus.ERROR,
@@ -36,7 +35,7 @@ export async function createExpense(formData: ExpenseSchema): Promise<ActionResp
 
     const expenseData = {
       ...validatedFields.data,
-      base_currency: base_currency as 'SEK',
+      base_currency: BASE_CURRENCY,
       base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
     };
 
@@ -73,11 +72,10 @@ export async function updateExpense(expenseId: number, formData: ExpenseSchema):
   }
 
   const { input_amount, input_currency } = validatedFields.data;
-  const base_currency = 'SEK'; // Hardcoded as requested
 
   try {
-    const conversion = await convertCurrency(input_amount, input_currency, base_currency);
-    
+    const conversion = await convertCurrency(input_amount, input_currency, BASE_CURRENCY);
+
     if (!conversion) {
       return {
         status: ActionStatus.ERROR,
@@ -87,7 +85,7 @@ export async function updateExpense(expenseId: number, formData: ExpenseSchema):
 
     const expenseData = {
       ...validatedFields.data,
-      base_currency: base_currency as 'SEK',
+      base_currency: BASE_CURRENCY,
       base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
     };
 

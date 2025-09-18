@@ -6,6 +6,7 @@ import { EmptyState } from '../layout/empty-state';
 import { PageTitle } from '../layout/layout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { fetchReports } from '@/lib/data';
+import { BASE_CURRENCY } from '@/lib/constants';
 
 export async function Reports() {
   const [reports] = await Promise.all([fetchReports()]);
@@ -37,7 +38,7 @@ export async function Reports() {
             {reports.map((report) => (
               <TableRow key={report.name}>
                 <TableCell>{report.name}</TableCell>
-                <TableCell>{report.total_amount || 0} SEK</TableCell>
+                <TableCell>{report.total_amount || 0} {BASE_CURRENCY}</TableCell>
                 <TableCell>
                   <StatusBadge status={report.status} />
                 </TableCell>

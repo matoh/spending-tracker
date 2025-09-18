@@ -1,1 +1,3 @@
-export const ExpenseCurrencies = ['SEK', 'EUR'] as const;
+import { BASE_CURRENCY } from '@/lib/constants';
+
+export const ExpenseCurrencies = [BASE_CURRENCY, 'EUR'] as const;

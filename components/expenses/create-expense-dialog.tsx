@@ -13,6 +13,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
+import { BASE_CURRENCY } from '@/lib/constants';
 
 export function CreateExpenseDialog({ reports }: { reports: Selectable<Reports>[] }) {
 
@@ -23,9 +24,9 @@ export function CreateExpenseDialog({ reports }: { reports: Selectable<Reports>[
       merchant: '',
       date: new Date(),
       input_amount: 0,
-      input_currency: 'SEK' as const,
+      input_currency: BASE_CURRENCY,
       base_amount: 0,
-      base_currency: 'SEK' as const,
+      base_currency: BASE_CURRENCY,
       category: '' as (typeof ExpenseCategories)[number], // Empty string to show as unselected in UI
       description: '',
       report_id: reports[0]?.id

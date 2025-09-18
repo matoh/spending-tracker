@@ -35,8 +35,7 @@ export async function fetchReports(status?: typeof ReportStatus): Promise<(Selec
         'reports.name',
         'reports.status',
         'reports.created_at',
-        // TODO: Fix it, use base amount after exchange rate is implemented
-        db.fn.sum('expenses.input_amount').as('total_amount')
+        db.fn.sum('expenses.base_amount').as('total_amount')
       ])
       .groupBy(['reports.id', 'reports.name', 'reports.status', 'reports.created_at']);
 

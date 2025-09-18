@@ -32,8 +32,7 @@ export async function Expenses() {
           <TableHeader>
             <TableRow>
               <TableHead>Merchant</TableHead>
-              <TableHead>Input total</TableHead>
-              <TableHead>Input currency</TableHead>
+              <TableHead className='text-right'>Input total</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Report</TableHead>
@@ -46,12 +45,10 @@ export async function Expenses() {
             {expenses.map((expense) => (
               <TableRow key={expense.id}>
                 <TableCell>{expense.merchant}</TableCell>
-                <TableCell>{expense.input_amount}</TableCell>
-                <TableCell>{expense.input_currency}</TableCell>
+                <TableCell className='text-right'>{expense.input_amount} {expense.input_currency}</TableCell>
                 <TableCell>{expense.category}</TableCell>
                 <TableCell>{expense.description || '-'}</TableCell>
-                {/* TODO: Fix typing */}
-                <TableCell>{reportMap.get((expense as any).report_id) || 'No report'}</TableCell>
+                <TableCell>{reportMap.get(expense.report_id)}</TableCell>
                 <TableCell>{expense.date.toDateString()}</TableCell>
                 <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
                 <TableCell>
