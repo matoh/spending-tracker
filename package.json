@@ -11,6 +11,7 @@
     "db:down": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/migrate.ts -- down",
     "db:migrate": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/migrate.ts -- latest",
     "db:seed": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/seed.ts",
+    "import-expenses": "npx ts-node -r dotenv/config -r tsconfig-paths/register --project tsconfig.scripts.json ./scripts/import-expenses.ts",
     "shadcn:add": "npx shadcn@latest add",
     "lint": "next lint"
   },
@@ -28,6 +29,7 @@
     "@radix-ui/react-toast": "^1.2.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "csv-parser": "^3.2.0",
     "date-fns": "^4.1.0",
     "kysely": "^0.28.5",
     "lucide-react": "^0.544.0",
