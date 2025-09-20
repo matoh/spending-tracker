@@ -72,3 +72,15 @@ export async function fetchReport(reportId: number): Promise<(Selectable<Reports
     throw new Error('Failed to fetch report data.');
   }
 }
+
+export async function fetchReportByName(reportName: string): Promise<Selectable<Reports> | undefined> {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    return await db.selectFrom('reports').selectAll().where('name', '=', reportName).executeTakeFirst();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch report data.');
+  }
+}

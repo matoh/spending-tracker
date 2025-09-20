@@ -1,11 +1,14 @@
+import { fetchReportByName } from '@/lib/data';
 import csv from 'csv-parser';
 import * as fs from 'fs';
 import * as path from 'path';
 import { kyselyConnection } from '../database/Database';
 import { BASE_CURRENCY } from '../lib/constants';
 import type { BaseCurrency, Category, InputCurrency } from '../node_modules/kysely-codegen/dist/db';
+import { ExpenseCategories } from '../types/expense-categories';
 
 interface CsvExpenseRow {
+  '﻿Timestamp': string;
   Timestamp: string;
   Merchant: string;
   Amount: string;
@@ -21,15 +24,15 @@ interface CsvExpenseRow {
 }
 
 interface ParsedExpense {
+  report_id: number;
   merchant: string;
-  date: Date;
-  input_amount: number;
-  input_currency: InputCurrency;
+  description?: string;
+  category: Category;
   base_amount: number;
   base_currency: BaseCurrency;
-  category: Category;
-  description?: string;
-  report_id: number;
+  input_amount: number;
+  input_currency: InputCurrency;
+  date: Date;
 }
 
 /**
@@ -53,7 +56,7 @@ async function parseCsvFile(filePath: string): Promise<CsvExpenseRow[]> {
 function mapCsvRowToExpense(row: CsvExpenseRow, reportId: number): ParsedExpense | null {
   try {
     // Parse date from timestamp - handle BOM character
-    const timestamp = row['Timestamp'] || row.Timestamp;
+    const timestamp = row['﻿Timestamp'] || row.Timestamp;
     const date = new Date(timestamp);
     if (isNaN(date.getTime())) {
       console.warn(`Invalid date format: ${timestamp}`);
@@ -70,19 +73,37 @@ function mapCsvRowToExpense(row: CsvExpenseRow, reportId: number): ParsedExpense
       return null;
     }
 
+    let category = row.Category as Category;
+    if (!ExpenseCategories.includes(category)) {
+      const categoryMap: Record<string, Category> = {
+        Benefits: 'Benefits',
+        Car: 'Car',
+        Fees: 'Fees',
+        Insurance: 'Insurance',
+        Materials: 'Materials',
+        'Meals and Entertainment': 'Meals',
+        'Professional Services': 'Professional Services',
+        Rent: 'Rent',
+        Travel: 'Travel',
+        Utilities: 'Utilities'
+      };
+
+      category = categoryMap[category] || 'Materials';
+    }
+
     // Use Comment as description, fallback to Tag if Comment is empty
     const description = row.Comment?.trim() || row.Tag?.trim() || undefined;
 
     return {
+      report_id: reportId,
       merchant: row.Merchant.trim(),
-      date,
-      input_amount: amount,
-      input_currency: 'SEK' as InputCurrency,
-      base_amount: amount,
-      base_currency: BASE_CURRENCY as BaseCurrency,
-      category: row.Category as Category,
       description,
-      report_id: reportId
+      category,
+      base_amount: amount,
+      base_currency: BASE_CURRENCY,
+      input_amount: amount,
+      input_currency: 'SEK',
+      date,
     };
   } catch (error) {
     console.warn(`Error parsing row: ${error}`);
@@ -104,13 +125,11 @@ async function importExpenses(csvFilePath: string, reportName: string): Promise<
 
     // Check if report exists by name
     const db = kyselyConnection();
-    const report = await db.selectFrom('reports').select('id').where('name', '=', reportName).executeTakeFirst();
+    const report = await fetchReportByName(reportName);
 
     if (!report) {
       throw new Error(`Report with name "${reportName}" not found`);
     }
-
-    const reportId = report.id;
 
     // Parse CSV file
     const csvRows = await parseCsvFile(csvFilePath);
@@ -121,7 +140,7 @@ async function importExpenses(csvFilePath: string, reportName: string): Promise<
     let skippedRows = 0;
 
     for (const row of csvRows) {
-      const expense = mapCsvRowToExpense(row, reportId);
+      const expense = mapCsvRowToExpense(row, report.id);
       if (expense) {
         expenses.push(expense);
       } else {
