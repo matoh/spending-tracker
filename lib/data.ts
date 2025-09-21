@@ -4,7 +4,7 @@ import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function fetchExpenses(reportId?: number) {
+export async function fetchExpenses(reportId?: number, page: number = 1, limit: number = 50) {
   noStore();
   const db = kyselyConnection();
 
@@ -15,10 +15,34 @@ export async function fetchExpenses(reportId?: number) {
       query = query.where('report_id', '=', reportId);
     }
 
-    return await query.limit(100).execute();
+    const offset = (page - 1) * limit;
+    return await query
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .offset(offset)
+      .execute();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data.');
+  }
+}
+
+export async function fetchExpensesCount(reportId?: number) {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    let query = db.selectFrom('expenses').select(db.fn.count('id').as('count'));
+
+    if (reportId) {
+      query = query.where('report_id', '=', reportId);
+    }
+
+    const result = await query.executeTakeFirst();
+    return Number(result?.count) || 0;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch expenses count.');
   }
 }
 

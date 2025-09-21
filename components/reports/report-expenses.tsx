@@ -2,6 +2,7 @@ import { BASE_CURRENCY } from '@/lib/constants';
 import { ExpenseCategories } from '@/types/expense-categories';
 import { Selectable } from 'kysely';
 import { Expenses, Reports } from 'kysely-codegen/dist/db';
+import { CurrencyAmount } from '../layout/currency-amount';
 import { PageTitle } from '../layout/layout';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../ui/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -59,7 +60,7 @@ export async function ReportExpenses({ report, expenses }: ReportExpensesProps) 
         </CardHeader>
         <CardContent>
           <div className='text-2xl font-bold'>
-            {report.total_amount} {BASE_CURRENCY}
+            <CurrencyAmount amount={report.total_amount as number} currency={BASE_CURRENCY} />
           </div>
           <div className='text-sm text-muted-foreground'>
             {expenses.length} expense{expenses.length !== 1 ? 's' : ''} across {categoryTotals.length} categor
@@ -78,7 +79,7 @@ export async function ReportExpenses({ report, expenses }: ReportExpensesProps) 
                   <CardTitle className='text-lg'>{category}</CardTitle>
                   <div className='text-right'>
                     <div className='text-xl font-bold'>
-                      {total.toLocaleString()} {BASE_CURRENCY}
+                      <CurrencyAmount amount={total} currency={BASE_CURRENCY} />
                     </div>
                     <div className='text-sm text-muted-foreground'>
                       {categoryExpenses.length} expense{categoryExpenses.length !== 1 ? 's' : ''}
@@ -102,7 +103,7 @@ export async function ReportExpenses({ report, expenses }: ReportExpensesProps) 
                       <TableRow key={expense.id}>
                         <TableCell>{expense.merchant}</TableCell>
                         <TableCell className='text-right'>
-                          {expense.base_amount?.toLocaleString()} {BASE_CURRENCY}
+                          <CurrencyAmount amount={expense.base_amount} currency={BASE_CURRENCY} />
                         </TableCell>
                         <TableCell>{expense.description || '-'}</TableCell>
                         <TableCell>{expense.date.toDateString()}</TableCell>

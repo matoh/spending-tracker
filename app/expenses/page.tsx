@@ -5,6 +5,13 @@ export const metadata: Metadata = {
   title: 'Expenses'
 };
 
-export default async function Page() {
-  return <Expenses />;
+interface PageProps {
+  searchParams: {
+    page?: string;
+  };
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const currentPage = parseInt(searchParams.page || '1', 10);
+  return <Expenses currentPage={currentPage} />;
 }
