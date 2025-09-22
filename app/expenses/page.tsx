@@ -6,12 +6,13 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const currentPage = parseInt(searchParams.page || '1', 10);
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt(resolvedSearchParams.page || '1', 10);
   return <Expenses currentPage={currentPage} />;
 }

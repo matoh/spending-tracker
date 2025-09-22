@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     reportId: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -3,17 +3,29 @@ import { DeleteReportDialog } from '@/components/reports/delete-report-dialog';
 import { EditReportDialog } from '@/components/reports/edit-report-dialog';
 import { StatusBadge } from '@/components/reports/status-badge';
 import { BASE_CURRENCY } from '@/lib/constants';
-import { fetchReports } from '@/lib/data';
+import { fetchReportsPaginated, fetchReportsCount } from '@/lib/data';
 import { NotebookText } from 'lucide-react';
 import Link from 'next/link';
 import { CurrencyAmount } from '../layout/currency-amount';
 import { EmptyState } from '../layout/empty-state';
 import { PageTitle } from '../layout/layout';
+import { PaginationWrapper } from '../layout/pagination-wrapper';
 import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
-export async function Reports() {
-  const [reports] = await Promise.all([fetchReports()]);
+interface ReportsProps {
+  currentPage: number;
+}
+
+export async function Reports({ currentPage }: ReportsProps) {
+  const limit = 10;
+  const [reports, totalCount] = await Promise.all([
+    fetchReportsPaginated(currentPage, limit),
+    fetchReportsCount()
+  ]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div>
@@ -64,6 +76,15 @@ export async function Reports() {
             ))}
           </TableBody>
         </Table>
+      )}
+
+      {/* Pagination */}
+      {reports.length > 0 && (
+        <PaginationWrapper
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl="/reports"
+        />
       )}
     </div>
   );
