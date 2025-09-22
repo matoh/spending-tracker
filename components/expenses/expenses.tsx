@@ -15,7 +15,7 @@ interface ExpensesProps {
 export async function Expenses({ currentPage }: ExpensesProps) {
   const limit = 50;
   const [expenses, reports, totalCount] = await Promise.all([
-    fetchExpenses(undefined, currentPage, limit),
+    fetchExpenses({ page: currentPage, limit }),
     fetchReports(),
     fetchExpensesCount()
   ]);

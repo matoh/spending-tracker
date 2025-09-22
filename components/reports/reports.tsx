@@ -3,7 +3,7 @@ import { DeleteReportDialog } from '@/components/reports/delete-report-dialog';
 import { EditReportDialog } from '@/components/reports/edit-report-dialog';
 import { StatusBadge } from '@/components/reports/status-badge';
 import { BASE_CURRENCY } from '@/lib/constants';
-import { fetchReportsPaginated, fetchReportsCount } from '@/lib/data';
+import { fetchReports, fetchReportsCount } from '@/lib/data';
 import { NotebookText } from 'lucide-react';
 import Link from 'next/link';
 import { CurrencyAmount } from '../layout/currency-amount';
@@ -20,7 +20,7 @@ interface ReportsProps {
 export async function Reports({ currentPage }: ReportsProps) {
   const limit = 10;
   const [reports, totalCount] = await Promise.all([
-    fetchReportsPaginated(currentPage, limit),
+    fetchReports({ page: currentPage, limit }),
     fetchReportsCount()
   ]);
 

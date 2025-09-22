@@ -4,7 +4,7 @@ import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function fetchExpenses(reportId?: number, page: number = 1, limit: number = 50) {
+export async function fetchExpenses({ reportId, page = 1, limit = 50 }: { reportId?: number; page?: number; limit?: number }) {
   noStore();
   const db = kyselyConnection();
 
@@ -46,9 +46,15 @@ export async function fetchExpensesCount(reportId?: number) {
   }
 }
 
-export async function fetchReports(
-  status?: typeof ReportStatus
-): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
+export async function fetchReports({ 
+  status, 
+  page = 1, 
+  limit = 50 
+}: { 
+  status?: typeof ReportStatus; 
+  page?: number; 
+  limit?: number; 
+} = {}): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
   noStore();
   const db = kyselyConnection();
 
@@ -63,10 +69,35 @@ export async function fetchReports(
       query = query.where('reports.status', '=', status);
     }
 
-    return await query.orderBy('reports.name', 'desc').execute();
+    query = query.orderBy('reports.name', 'desc');
+
+    // Apply pagination
+    const offset = (page - 1) * limit;
+    query = query.limit(limit).offset(offset);
+
+    return await query.execute();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch reports data.');
+  }
+}
+
+export async function fetchReportsCount({ status }: { status?: typeof ReportStatus } = {}): Promise<number> {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    let query = db.selectFrom('reports').select(db.fn.count('id').as('count'));
+
+    if (status) {
+      query = query.where('status', '=', status);
+    }
+
+    const result = await query.executeTakeFirst();
+    return Number(result?.count) || 0;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch reports count.');
   }
 }
 

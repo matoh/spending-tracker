@@ -27,7 +27,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const [report, expenses] = await Promise.all([fetchReport(reportId), fetchExpenses(reportId, 1, 50)]);
+  const [report, expenses] = await Promise.all([fetchReport(reportId), fetchExpenses({ reportId, page: 1, limit: 50 })]);
 
   if (!report) {
     notFound();
