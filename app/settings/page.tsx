@@ -1,4 +1,5 @@
 import { PageTitle } from '@/components/layout/layout';
+import { Settings } from '@/components/settings/settings';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,8 +8,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div>
-      <PageTitle text='Settings page' />
+    <div className='space-y-6'>
+      <PageTitle text='Settings' />
+      <Settings />
     </div>
   );
 }
