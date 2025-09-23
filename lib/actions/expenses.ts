@@ -1,7 +1,7 @@
 'use server';
 
 import { kyselyConnection as db } from '@/database/Database';
-import { ExpenseSchema, expenseSchema } from '@/lib/schemas/expenses';
+import { ExpenseSchema, expenseSchema, BulkExpenseSchema, bulkExpenseSchema } from '@/lib/schemas/expenses';
 import { convertCurrency } from '@/lib/services/exchange-rate';
 import { ActionResponse, ActionStatus } from '@/types/action-response';
 import { revalidatePath } from 'next/cache';
@@ -36,7 +36,8 @@ export async function createExpense(formData: ExpenseSchema): Promise<ActionResp
     const expenseData = {
       ...validatedFields.data,
       base_currency: BASE_CURRENCY,
-      base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
+      base_amount: Math.round(conversion.convertedAmount * 100) / 100, // Round to 2 decimal places
+      report_id: validatedFields.data.report_id || null
     };
 
     await db().insertInto('expenses').values(expenseData).returningAll().execute();
@@ -86,7 +87,8 @@ export async function updateExpense(expenseId: number, formData: ExpenseSchema):
     const expenseData = {
       ...validatedFields.data,
       base_currency: BASE_CURRENCY,
-      base_amount: Math.round(conversion.convertedAmount * 100) / 100 // Round to 2 decimal places
+      base_amount: Math.round(conversion.convertedAmount * 100) / 100, // Round to 2 decimal places
+      report_id: validatedFields.data.report_id || null
     };
 
     await db().updateTable('expenses').set(expenseData).where('id', '=', Number(expenseId)).returningAll().execute();
@@ -130,4 +132,58 @@ export async function deleteExpense(expenseId: number): Promise<ActionResponse> 
       message: 'Failed to delete expense.'
     };
   }
+}
+
+/**
+ * Create multiple expenses from the form data
+ * @param formData
+ */
+export async function createBulkExpenses(formData: BulkExpenseSchema): Promise<ActionResponse> {
+  const validatedFields = bulkExpenseSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return {
+      status: ActionStatus.ERROR,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to create expenses.'
+    };
+  }
+
+  const { expenses } = validatedFields.data;
+  
+  try {
+    // Process all expenses and convert currencies
+    const processedExpenses = await Promise.all(
+      expenses.map(async (expense) => {
+        const { input_amount, input_currency } = expense;
+        const conversion = await convertCurrency(input_amount, input_currency, BASE_CURRENCY);
+
+        if (!conversion) {
+          throw new Error(`Failed to convert currency for expense: ${expense.merchant}`);
+        }
+
+        return {
+          ...expense,
+          base_currency: BASE_CURRENCY,
+          base_amount: Math.round(conversion.convertedAmount * 100) / 100, // Round to 2 decimal places
+          report_id: expense.report_id || null
+        };
+      })
+    );
+
+    // Insert all expenses in a single transaction
+    await db().insertInto('expenses').values(processedExpenses).execute();
+  } catch (error) {
+    console.log('Database Error: Failed to create bulk expenses.', JSON.stringify(error));
+    return {
+      status: ActionStatus.ERROR,
+      message: 'Failed to create expenses.'
+    };
+  }
+
+  revalidatePath('/expenses');
+  return {
+    status: ActionStatus.SUCCESS,
+    message: `Successfully created ${expenses.length} expenses`
+  };
 }

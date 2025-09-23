@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { fetchExpenses, fetchExpensesCount, fetchReports } from '@/lib/data';
 import { CurrencyAmount } from '../layout/currency-amount';
 import { CreateExpenseDialog } from './create-expense-dialog';
+import { CreateBulkExpenseDialog } from './create-bulk-expense-dialog';
 
 interface ExpensesProps {
   currentPage: number;
@@ -32,14 +33,24 @@ export async function Expenses({ currentPage }: ExpensesProps) {
     <div>
       <div className='flex justify-between'>
         <PageTitle text='Expenses' />
-        {expenses.length !== 0 && <CreateExpenseDialog reports={openReports} />}
+        {expenses.length !== 0 && (
+          <div className='flex gap-2'>
+            <CreateBulkExpenseDialog reports={openReports} />
+            <CreateExpenseDialog reports={openReports} />
+          </div>
+        )}
       </div>
 
       {expenses.length === 0 ? (
         <EmptyState
           title='No expenses yet'
           description="Start tracking your spending by adding your first expense. It's easy to get started!"
-          action={<CreateExpenseDialog reports={openReports} />}
+          action={
+            <div className='flex gap-2'>
+              <CreateBulkExpenseDialog reports={openReports} />
+              <CreateExpenseDialog reports={openReports} />
+            </div>
+          }
         />
       ) : (
         <Table className='mt-10'>
@@ -64,7 +75,7 @@ export async function Expenses({ currentPage }: ExpensesProps) {
                 </TableCell>
                 <TableCell>{expense.category}</TableCell>
                 <TableCell>{expense.description || '-'}</TableCell>
-                <TableCell>{reportMap.get(expense.report_id)}</TableCell>
+                <TableCell>{expense.report_id ? reportMap.get(expense.report_id) : '-'}</TableCell>
                 <TableCell>{expense.date.toDateString()}</TableCell>
                 <TableCell>{expense.created_at ? expense.created_at.toDateString() : ''}</TableCell>
                 <TableCell>
