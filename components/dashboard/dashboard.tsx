@@ -1,6 +1,7 @@
 import { PageTitle } from '@/components/layout/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { fetchExpensesCount, fetchReportsCount } from '@/lib/data';
+import { ExpenseAnalytics } from '@/components/dashboard/analytics/expense-analytics';
 
 export async function Dashboard() {
   const [expensesCount, reportsCount] = await Promise.all([
@@ -38,6 +39,11 @@ export async function Dashboard() {
             </CardDescription>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Analytics Section */}
+      <div className="mt-8">
+        <ExpenseAnalytics />
       </div>
     </>
   );
