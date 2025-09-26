@@ -4,10 +4,11 @@ import { EmptyState } from '@/components/layout/empty-state';
 import { PageTitle } from '@/components/layout/layout';
 import { PaginationWrapper } from '@/components/layout/pagination-wrapper';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { fetchExpenses, fetchExpensesCount, fetchReports } from '@/lib/data';
+import { getExpenses, getExpensesCount } from '@/lib/data/expenses';
+import { getReports } from '@/lib/data/reports';
 import { CurrencyAmount } from '../layout/currency-amount';
-import { CreateExpenseDialog } from './create-expense-dialog';
 import { CreateBulkExpenseDialog } from './create-bulk-expense-dialog';
+import { CreateExpenseDialog } from './create-expense-dialog';
 
 interface ExpensesProps {
   currentPage: number;
@@ -15,11 +16,7 @@ interface ExpensesProps {
 
 export async function Expenses({ currentPage }: ExpensesProps) {
   const limit = 50;
-  const [expenses, reports, totalCount] = await Promise.all([
-    fetchExpenses({ page: currentPage, limit }),
-    fetchReports(),
-    fetchExpensesCount()
-  ]);
+  const [expenses, reports, totalCount] = await Promise.all([getExpenses({ page: currentPage, limit }), getReports(), getExpensesCount()]);
 
   const openReports = reports.filter((report) => report.status === 'open');
 
@@ -91,13 +88,7 @@ export async function Expenses({ currentPage }: ExpensesProps) {
       )}
 
       {/* Pagination */}
-      {expenses.length > 0 && (
-        <PaginationWrapper
-          currentPage={currentPage}
-          totalPages={totalPages}
-          baseUrl="/expenses"
-        />
-      )}
+      {expenses.length > 0 && <PaginationWrapper currentPage={currentPage} totalPages={totalPages} baseUrl='/expenses' />}
     </div>
   );
 }

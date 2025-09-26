@@ -4,57 +4,17 @@ import { Selectable } from 'kysely';
 import { Reports } from 'kysely-codegen/dist/db';
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function fetchExpenses({ reportId, page = 1, limit = 50 }: { reportId?: number; page?: number; limit?: number }) {
-  noStore();
-  const db = kyselyConnection();
-
-  try {
-    let query = db.selectFrom('expenses').selectAll();
-
-    if (reportId) {
-      query = query.where('report_id', '=', reportId);
-    }
-
-    const offset = (page - 1) * limit;
-    return await query
-      .orderBy('created_at', 'desc')
-      .limit(limit)
-      .offset(offset)
-      .execute();
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
-  }
+export interface ReportFilters {
+  status?: typeof ReportStatus;
+  page?: number;
+  limit?: number;
 }
 
-export async function fetchExpensesCount(reportId?: number) {
-  noStore();
-  const db = kyselyConnection();
-
-  try {
-    let query = db.selectFrom('expenses').select(db.fn.count('id').as('count'));
-
-    if (reportId) {
-      query = query.where('report_id', '=', reportId);
-    }
-
-    const result = await query.executeTakeFirst();
-    return Number(result?.count) || 0;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch expenses count.');
-  }
-}
-
-export async function fetchReports({ 
+export async function getReports({ 
   status, 
   page = 1, 
   limit = 50 
-}: { 
-  status?: typeof ReportStatus; 
-  page?: number; 
-  limit?: number; 
-} = {}): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
+}: ReportFilters = {}): Promise<(Selectable<Reports> & { total_amount: string | number | bigint | null })[]> {
   noStore();
   const db = kyselyConnection();
 
@@ -82,7 +42,7 @@ export async function fetchReports({
   }
 }
 
-export async function fetchReportsCount({ status }: { status?: typeof ReportStatus } = {}): Promise<number> {
+export async function getReportsCount({ status }: { status?: typeof ReportStatus } = {}): Promise<number> {
   noStore();
   const db = kyselyConnection();
 
@@ -101,7 +61,7 @@ export async function fetchReportsCount({ status }: { status?: typeof ReportStat
   }
 }
 
-export async function fetchReport(reportId: number): Promise<(Selectable<Reports> & { total_amount: number }) | undefined> {
+export async function getReportById(reportId: number): Promise<(Selectable<Reports> & { total_amount: number }) | undefined> {
   noStore();
   const db = kyselyConnection();
 
@@ -128,7 +88,7 @@ export async function fetchReport(reportId: number): Promise<(Selectable<Reports
   }
 }
 
-export async function fetchReportByName(reportName: string): Promise<Selectable<Reports> | undefined> {
+export async function getReportByName(reportName: string): Promise<Selectable<Reports> | undefined> {
   noStore();
   const db = kyselyConnection();
 

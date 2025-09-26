@@ -8,7 +8,6 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { StatusBadge } from './status-badge';
-import { ExpenseAnalytics } from '../dashboard/analytics/expense-analytics';
 
 interface ReportExpensesProps {
   report: Selectable<Reports> & { total_amount: number };
@@ -69,11 +68,6 @@ export async function ReportExpenses({ report, expenses }: ReportExpensesProps) 
           </div>
         </CardContent>
       </Card>
-
-      {/* Analytics Section */}
-      <div className='mb-8'>
-        <ExpenseAnalytics reportId={report.id} />
-      </div>
 
       {/* Category Groups */}
       {categoryTotals.length > 0 ? (

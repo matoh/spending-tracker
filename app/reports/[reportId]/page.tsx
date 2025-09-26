@@ -1,5 +1,6 @@
 import { ReportExpenses } from '@/components/reports/report-expenses';
-import { fetchExpenses, fetchReport } from '@/lib/data';
+import { getExpenses } from '@/lib/data/expenses';
+import { getReportById } from '@/lib/data/reports';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -12,7 +13,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { reportId: reportIdString } = await params;
   const reportId = parseInt(reportIdString);
-  const report = await fetchReport(reportId);
+  const report = await getReportById(reportId);
 
   return {
     title: report ? `${report.name} - Expenses` : 'Report Not Found'
@@ -27,7 +28,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const [report, expenses] = await Promise.all([fetchReport(reportId), fetchExpenses({ reportId, page: 1, limit: 50 })]);
+  const [report, expenses] = await Promise.all([getReportById(reportId), getExpenses({ reportId, page: 1, limit: 50 })]);
 
   if (!report) {
     notFound();

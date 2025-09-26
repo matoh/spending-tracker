@@ -1,4 +1,4 @@
-import { fetchReportByName } from '@/lib/data';
+import { getReportByName } from '@/lib/data/reports';
 import csv from 'csv-parser';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -103,7 +103,7 @@ function mapCsvRowToExpense(row: CsvExpenseRow, reportId: number): ParsedExpense
       base_currency: BASE_CURRENCY,
       input_amount: amount,
       input_currency: 'SEK',
-      date,
+      date
     };
   } catch (error) {
     console.warn(`Error parsing row: ${error}`);
@@ -125,7 +125,7 @@ async function importExpenses(csvFilePath: string, reportName: string): Promise<
 
     // Check if report exists by name
     const db = kyselyConnection();
-    const report = await fetchReportByName(reportName);
+    const report = await getReportByName(reportName);
 
     if (!report) {
       throw new Error(`Report with name "${reportName}" not found`);

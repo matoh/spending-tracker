@@ -1,20 +1,19 @@
+import { ExpenseStatistics } from '@/components/dashboard/expense-statistics';
 import { PageTitle } from '@/components/layout/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { fetchExpensesCount, fetchReportsCount } from '@/lib/data';
-import { ExpenseAnalytics } from '@/components/dashboard/analytics/expense-analytics';
+import { getOldestExpenseYear } from '@/lib/data/analytics';
+import { getExpensesCount } from '@/lib/data/expenses';
+import { getReportsCount } from '@/lib/data/reports';
 
 export async function Dashboard() {
-  const [expensesCount, reportsCount] = await Promise.all([
-    fetchExpensesCount(),
-    fetchReportsCount()
-  ]);
+  const [expensesCount, reportsCount, oldestYear] = await Promise.all([getExpensesCount(), getReportsCount(), getOldestExpenseYear()]);
 
   return (
     <>
       <div className='flex items-center'>
         <PageTitle text='Dashboard' />
       </div>
-      
+
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6'>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
@@ -22,28 +21,23 @@ export async function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{expensesCount}</div>
-            <CardDescription className='text-xs text-muted-foreground'>
-              All recorded expenses
-            </CardDescription>
+            <CardDescription className='text-xs text-muted-foreground'>All recorded expenses</CardDescription>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>Total Reports</CardTitle>
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>{reportsCount}</div>
-            <CardDescription className='text-xs text-muted-foreground'>
-              All generated reports
-            </CardDescription>
+            <CardDescription className='text-xs text-muted-foreground'>All generated reports</CardDescription>
           </CardContent>
         </Card>
       </div>
 
-      {/* Analytics Section */}
-      <div className="mt-8">
-        <ExpenseAnalytics />
+      <div className='mt-8'>
+        <ExpenseStatistics initialOldestYear={oldestYear} />
       </div>
     </>
   );
