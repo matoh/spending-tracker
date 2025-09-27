@@ -1,12 +1,22 @@
-import { ExpenseStatistics } from '@/components/dashboard/expense-statistics';
+import { SpendingStatistics } from '@/components/dashboard/spending-statistics';
 import { PageTitle } from '@/components/layout/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getOldestExpenseYear } from '@/lib/data/analytics';
-import { getExpensesCount } from '@/lib/data/expenses';
+import { getAllAnalyticsData } from '@/lib/data/analytics';
+import { getExpensesCount, getValidYears } from '@/lib/data/expenses';
 import { getReportsCount } from '@/lib/data/reports';
 
-export async function Dashboard() {
-  const [expensesCount, reportsCount, oldestYear] = await Promise.all([getExpensesCount(), getReportsCount(), getOldestExpenseYear()]);
+interface DashboardProps {
+  year?: number;
+}
+
+export async function Dashboard({ year }: DashboardProps = {}) {
+  const selectedYear = year || new Date().getFullYear();
+  const [expensesCount, reportsCount, analyticsData, validYears] = await Promise.all([
+    getExpensesCount(),
+    getReportsCount(),
+    getAllAnalyticsData({ year: selectedYear }),
+    getValidYears()
+  ]);
 
   return (
     <>
@@ -36,8 +46,8 @@ export async function Dashboard() {
         </Card>
       </div>
 
-      <div className='mt-8'>
-        <ExpenseStatistics initialOldestYear={oldestYear} />
+      <div className='mt-4'>
+        <SpendingStatistics analyticsData={analyticsData} validYears={validYears} selectedYear={selectedYear} />
       </div>
     </>
   );

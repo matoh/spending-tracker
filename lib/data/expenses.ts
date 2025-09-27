@@ -1,4 +1,5 @@
 import { kyselyConnection } from '@/database/Database';
+import { sql } from 'kysely';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export interface ExpenseFilters {
@@ -62,5 +63,29 @@ export async function getExpenseById(id: number) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch expense data.');
+  }
+}
+
+/**
+ * Get all years where expenses exist
+ * @returns Array of years (as numbers) that have expenses
+ */
+export async function getValidYears(): Promise<number[]> {
+  noStore();
+  const db = kyselyConnection();
+
+  try {
+    const result = await db
+      .selectFrom('expenses')
+      .select(sql<number>`EXTRACT(YEAR FROM date)`.as('year'))
+      .distinct()
+      .execute();
+
+    return result
+      .map(row => Number(row.year))
+      .sort((a, b) => b - a); // Sort in descending order
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch valid years.');
   }
 }
