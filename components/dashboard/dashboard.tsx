@@ -1,7 +1,7 @@
 import { SpendingStatistics } from '@/components/dashboard/spending-statistics';
 import { PageTitle } from '@/components/layout/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getAllAnalyticsData } from '@/lib/data/analytics';
+import { getAnalyticsData } from '@/lib/data/analytics';
 import { getExpensesCount, getValidYears } from '@/lib/data/expenses';
 import { getReportsCount } from '@/lib/data/reports';
 
@@ -14,7 +14,7 @@ export async function Dashboard({ year }: DashboardProps = {}) {
   const [expensesCount, reportsCount, analyticsData, validYears] = await Promise.all([
     getExpensesCount(),
     getReportsCount(),
-    getAllAnalyticsData({ year: selectedYear }),
+    getAnalyticsData(selectedYear),
     getValidYears()
   ]);
 

@@ -52,7 +52,7 @@ export async function Reports({ currentPage }: ReportsProps) {
               <TableRow key={report.name}>
                 <TableCell>{report.name}</TableCell>
                 <TableCell>
-                  <CurrencyAmount amount={(report.total_amount || 0) as number} currency={BASE_CURRENCY} />
+                  <CurrencyAmount amount={(report.total_amount || 0) as number} />
                 </TableCell>
                 <TableCell>
                   <StatusBadge status={report.status} />
