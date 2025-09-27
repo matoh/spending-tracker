@@ -69,7 +69,7 @@ export function SpendingInsights({ analyticsData, selectedYear }: SpendingInsigh
   return (
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
       <InsightCard
-        title='Total Spending'
+        title='Yearly Spending'
         value={<CurrencyAmount amount={analyticsData.totalSpending} />}
         icon={<DollarSign className='h-4 w-4' />}
         description={`Total expenses for ${selectedYear}`}
@@ -101,7 +101,7 @@ export function SpendingInsights({ analyticsData, selectedYear }: SpendingInsigh
       />
 
       <InsightCard
-        title='Total Expenses'
+        title='Total Yearly Expenses'
         value={totalExpenses.toLocaleString()}
         icon={<FileText className='h-4 w-4' />}
         description={`Number of expenses in ${selectedYear}`}

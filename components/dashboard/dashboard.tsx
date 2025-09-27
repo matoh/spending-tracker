@@ -1,4 +1,5 @@
 import { SpendingStatistics } from '@/components/dashboard/spending-statistics';
+import { SpendingYearSelector } from '@/components/dashboard/spending-year-selector';
 import { PageTitle } from '@/components/layout/layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAnalyticsData } from '@/lib/data/analytics';
@@ -20,8 +21,9 @@ export async function Dashboard({ year }: DashboardProps = {}) {
 
   return (
     <>
-      <div className='flex items-center'>
+      <div className='flex items-center justify-between'>
         <PageTitle text='Dashboard' />
+        <SpendingYearSelector validYears={validYears} selectedYear={selectedYear} />
       </div>
 
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6'>
@@ -47,7 +49,7 @@ export async function Dashboard({ year }: DashboardProps = {}) {
       </div>
 
       <div className='mt-4'>
-        <SpendingStatistics analyticsData={analyticsData} validYears={validYears} selectedYear={selectedYear} />
+        <SpendingStatistics analyticsData={analyticsData} selectedYear={selectedYear} />
       </div>
     </>
   );
