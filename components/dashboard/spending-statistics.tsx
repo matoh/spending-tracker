@@ -1,11 +1,11 @@
 'use client';
 
 import { AnalyticsData } from '@/lib/data/analytics';
-import { AnalyticsCard } from './analytics/analytics-card';
-import { CategoryBreakdownChart } from './analytics/charts/category-breakdown-chart';
-import { MonthlySpendingChart } from './analytics/charts/monthly-spending-chart';
-import { YearOverYearChart } from './analytics/charts/year-over-year-chart';
-import { SpendingInsights } from './analytics/spending-insights';
+import { AnalyticsCard } from './analytics-card';
+import { CategoryBreakdownChart } from './charts/category-breakdown-chart';
+import { MonthlySpendingChart } from './charts/monthly-spending-chart';
+import { YearOverYearChart } from './charts/year-over-year-chart';
+import { SpendingInsights } from './spending-insights';
 
 interface SpendingStatisticsProps {
   analyticsData: AnalyticsData;
