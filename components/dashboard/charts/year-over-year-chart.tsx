@@ -1,7 +1,7 @@
 'use client';
 
-import { CurrencyAmount } from '@/components/layout/currency-amount';
-import { YearOverYearData } from '@/lib/data/analytics';
+import { CurrencyAmount, formatNumber } from '@/components/layout/currency-amount';
+import { AnalyticsData, YearOverYearData } from '@/lib/data/analytics';
 import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
@@ -10,11 +10,11 @@ interface YearOverYearDataWithGrowth extends YearOverYearData {
   growthPercentage: number;
 }
 
-export function YearOverYearChart({ data: rawData }: { data: YearOverYearData[] }) {
+export function YearOverYearChart({ analyticsData }: { analyticsData: AnalyticsData }) {
   const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
 
   // Transform data for the chart
-  const data = rawData.map((item: YearOverYearData) => ({
+  const data = analyticsData.yearOverYear.map((item: YearOverYearData) => ({
     year: item.year,
     total_amount: item.total_amount,
     expense_count: item.expense_count
@@ -48,13 +48,11 @@ export function YearOverYearChart({ data: rawData }: { data: YearOverYearData[] 
   };
 
   const dataWithGrowth = calculateGrowth(data);
-  const currentGrowth = dataWithGrowth[dataWithGrowth.length - 1];
-  console.log('currentGrowth', currentGrowth);
 
   return (
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
-        <div className='text-sm text-muted-foreground'>{data.length} years of data</div>
+        <div className='text-sm text-muted-foreground'>{analyticsData.yearOverYear.length} years of data</div>
         <div className='flex gap-2'>
           <button
             onClick={() => setChartType('bar')}
@@ -82,7 +80,7 @@ export function YearOverYearChart({ data: rawData }: { data: YearOverYearData[] 
             <XAxis dataKey='year' tick={{ fontSize: 12 }} />
             <YAxis
               tick={{ fontSize: 12 }}
-              tickFormatter={(value) => value.toLocaleString('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              tickFormatter={(value) => formatNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             />
             <Tooltip
               content={({ active, payload }) => {
@@ -116,7 +114,7 @@ export function YearOverYearChart({ data: rawData }: { data: YearOverYearData[] 
             <XAxis dataKey='year' tick={{ fontSize: 12 }} />
             <YAxis
               tick={{ fontSize: 12 }}
-              tickFormatter={(value) => value.toLocaleString('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              tickFormatter={(value) => formatNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             />
             <Tooltip
               content={({ active, payload }) => {

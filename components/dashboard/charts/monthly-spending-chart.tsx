@@ -1,13 +1,13 @@
 'use client';
 
-import { CurrencyAmount } from '@/components/layout/currency-amount';
-import { MonthlySpendingData } from '@/lib/data/analytics';
+import { CurrencyAmount, formatNumber } from '@/components/layout/currency-amount';
+import { AnalyticsData, MonthlySpendingData } from '@/lib/data/analytics';
 import { calculateLinearRegression } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-export function MonthlySpendingChart({ monthlyExpenseData }: { monthlyExpenseData: MonthlySpendingData[] }) {
-  if (monthlyExpenseData.length === 0) {
+export function MonthlySpendingChart({ analyticsData }: { analyticsData: AnalyticsData }) {
+  if (analyticsData.monthlyTrend.length === 0) {
     return (
       <div className='flex items-center justify-center h-64'>
         <div className='text-sm text-muted-foreground'>No spending data available for the selected period</div>
@@ -15,12 +15,11 @@ export function MonthlySpendingChart({ monthlyExpenseData }: { monthlyExpenseDat
     );
   }
 
-  const { trendValues } = calculateLinearRegression(monthlyExpenseData.map((item) => item.total_amount));
-  const dataWithTrend = monthlyExpenseData.map((item, index) => ({
+  const { trendValues } = calculateLinearRegression(analyticsData.monthlyTrend.map((item) => item.total_amount));
+  const dataWithTrend = analyticsData.monthlyTrend.map((item, index) => ({
     ...item,
     trend: trendValues[index]
   }));
-  const averageSpending = monthlyExpenseData.reduce((sum, item) => sum + item.total_amount, 0) / monthlyExpenseData.length;
 
   // Transform data for chart display
   const chartData = dataWithTrend.map((item) => ({
@@ -32,9 +31,9 @@ export function MonthlySpendingChart({ monthlyExpenseData }: { monthlyExpenseDat
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
         <div className='text-sm text-muted-foreground'>
-          Average monthly spending: <CurrencyAmount amount={averageSpending} />
+          Average monthly spending: <CurrencyAmount amount={analyticsData.averageSpending} />
         </div>
-        <div className='text-sm text-muted-foreground'>{monthlyExpenseData.length} months of data</div>
+        <div className='text-sm text-muted-foreground'>{analyticsData.monthlyTrend.length} months of data</div>
       </div>
 
       <ResponsiveContainer width='100%' height={300}>
@@ -43,7 +42,7 @@ export function MonthlySpendingChart({ monthlyExpenseData }: { monthlyExpenseDat
           <XAxis dataKey='month' tick={{ fontSize: 12 }} />
           <YAxis
             tick={{ fontSize: 12 }}
-            tickFormatter={(value) => `${value.toLocaleString('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+            tickFormatter={(value) => formatNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
           />
           <Tooltip
             content={({ active, payload, label }) => {
@@ -62,7 +61,7 @@ export function MonthlySpendingChart({ monthlyExpenseData }: { monthlyExpenseDat
             }}
           />
           <ReferenceLine
-            y={averageSpending}
+            y={analyticsData.averageSpending}
             strokeDasharray='2 2'
             label={{ value: 'Average', position: 'top' }}
           />

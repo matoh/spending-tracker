@@ -54,7 +54,6 @@ export function SpendingInsights({ analyticsData, selectedYear }: SpendingInsigh
     );
   }
 
-  const monthlyAverage = analyticsData.totalSpending / Math.max(analyticsData.monthlyTrend.length, 1);
   const totalExpenses = analyticsData.monthlyTrend.reduce((sum, month) => sum + month.expense_count, 0);
 
   // Year-over-year comparison
@@ -77,7 +76,7 @@ export function SpendingInsights({ analyticsData, selectedYear }: SpendingInsigh
 
       <InsightCard
         title='Monthly Average'
-        value={<CurrencyAmount amount={monthlyAverage} />}
+        value={<CurrencyAmount amount={analyticsData.averageSpending} />}
         icon={<Calendar className='h-4 w-4' />}
         description='Average spending per month'
       />

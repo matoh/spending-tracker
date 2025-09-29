@@ -20,17 +20,17 @@ export function SpendingStatistics({ analyticsData, selectedYear }: SpendingStat
       <div className='grid gap-6'>
         <div className='grid gap-6 lg:grid-cols-2'>
           <AnalyticsCard title='Monthly Spending Trend' description='Track your spending patterns over time with trend analysis'>
-            <MonthlySpendingChart monthlyExpenseData={analyticsData.monthlyTrend} />
+            <MonthlySpendingChart analyticsData={analyticsData} />
           </AnalyticsCard>
 
           <AnalyticsCard title='Category Breakdown' description='See where your money goes by expense category'>
-            <CategoryBreakdownChart data={analyticsData.categoryBreakdown} />
+            <CategoryBreakdownChart analyticsData={analyticsData} />
           </AnalyticsCard>
         </div>
 
         <div className='grid gap-6 lg:grid-cols-2'>
           <AnalyticsCard title='Year-over-Year Comparison' description='Compare your spending across different years'>
-            <YearOverYearChart data={analyticsData.yearOverYear} />
+            <YearOverYearChart analyticsData={analyticsData} />
           </AnalyticsCard>
         </div>
       </div>

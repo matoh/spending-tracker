@@ -1,11 +1,11 @@
 'use client';
 
-import { CurrencyAmount } from '@/components/layout/currency-amount';
-import { CategoryBreakdownData } from '@/lib/data/analytics';
+import { CurrencyAmount, formatNumber } from '@/components/layout/currency-amount';
+import { AnalyticsData, CategoryBreakdownData } from '@/lib/data/analytics';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-export function CategoryBreakdownChart({ data: rawData }: { data: CategoryBreakdownData[] }) {
-  const data = rawData.map((item: CategoryBreakdownData) => ({
+export function CategoryBreakdownChart({ analyticsData }: { analyticsData: AnalyticsData }) {
+  const data = analyticsData.categoryBreakdown.map((item: CategoryBreakdownData) => ({
     category: item.category,
     total_amount: item.total_amount,
     expense_count: item.expense_count
@@ -19,13 +19,11 @@ export function CategoryBreakdownChart({ data: rawData }: { data: CategoryBreakd
     );
   }
 
-  const totalAmount = data.reduce((sum, item) => sum + item.total_amount, 0);
-
   return (
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
         <div className='text-sm text-muted-foreground'>
-          Total: <CurrencyAmount amount={totalAmount} />
+          Total: <CurrencyAmount amount={analyticsData.totalSpending} />
         </div>
       </div>
 
@@ -35,7 +33,7 @@ export function CategoryBreakdownChart({ data: rawData }: { data: CategoryBreakd
           <XAxis dataKey='category' tick={{ fontSize: 12 }} angle={-45} textAnchor='end' height={80} />
           <YAxis
             tick={{ fontSize: 12 }}
-            tickFormatter={(value) => value.toLocaleString('sv-SE', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+            tickFormatter={(value) => formatNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
           />
           <Tooltip
             content={({ active, payload }) => {

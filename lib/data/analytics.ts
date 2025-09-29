@@ -130,6 +130,7 @@ export interface AnalyticsData {
   categoryBreakdown: CategoryBreakdownData[];
   yearOverYear: YearOverYearData[];
   totalSpending: number;
+  averageSpending: number;
 }
 
 export async function getAnalyticsData(year: number): Promise<AnalyticsData> {
@@ -147,7 +148,8 @@ export async function getAnalyticsData(year: number): Promise<AnalyticsData> {
       monthlyTrend,
       categoryBreakdown,
       yearOverYear,
-      totalSpending
+      totalSpending,
+      averageSpending: totalSpending / Math.max(monthlyTrend.length, 1)
     };
   } catch (error) {
     console.error('Error fetching analytics data:', error);
