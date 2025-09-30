@@ -4,20 +4,21 @@ import { EmptyState } from '@/components/layout/empty-state';
 import { PageTitle } from '@/components/layout/layout';
 import { PaginationWrapper } from '@/components/layout/pagination-wrapper';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getExpenses, getExpensesCount } from '@/lib/data/expenses';
-import { getReports } from '@/lib/data/reports';
+import { Selectable } from 'kysely';
+import type { Expenses, Reports } from 'kysely-codegen/dist/db';
 import { CurrencyAmount } from '../layout/currency-amount';
 import { CreateBulkExpenseDialog } from './create-bulk-expense-dialog';
 import { CreateExpenseDialog } from './create-expense-dialog';
 
 interface ExpensesProps {
   currentPage: number;
+  expenses: Selectable<Expenses>[];
+  reports: (Selectable<Reports> & { total_amount: number })[];
+  totalCount: number;
+  limit: number;
 }
 
-export async function Expenses({ currentPage }: ExpensesProps) {
-  const limit = 50;
-  const [expenses, reports, totalCount] = await Promise.all([getExpenses({ page: currentPage, limit }), getReports(), getExpensesCount()]);
-
+export async function Expenses({ currentPage, expenses, reports, totalCount, limit }: ExpensesProps) {
   const openReports = reports.filter((report) => report.status === 'open');
 
   // Create a map of report IDs to report names for quick lookup

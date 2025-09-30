@@ -13,6 +13,6 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
-  const currentPage = parseInt(resolvedSearchParams.page || '1', 10);
+  const currentPage = parseInt(resolvedSearchParams.page || '1');
   return <Reports currentPage={currentPage} />;
 }

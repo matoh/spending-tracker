@@ -20,7 +20,7 @@ export async function Dashboard({ year }: DashboardProps = {}) {
   ]);
 
   return (
-    <>
+    <div>
       <div className='flex items-center justify-between'>
         <PageTitle text='Dashboard' />
         <SpendingYearSelector validYears={validYears} selectedYear={selectedYear} />
@@ -51,6 +51,6 @@ export async function Dashboard({ year }: DashboardProps = {}) {
       <div className='mt-4'>
         <SpendingStatistics analyticsData={analyticsData} selectedYear={selectedYear} />
       </div>
-    </>
+    </div>
   );
 }

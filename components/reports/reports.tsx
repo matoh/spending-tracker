@@ -2,7 +2,6 @@ import { CreateReportDialog } from '@/components/reports/create-report-dialog';
 import { DeleteReportDialog } from '@/components/reports/delete-report-dialog';
 import { EditReportDialog } from '@/components/reports/edit-report-dialog';
 import { StatusBadge } from '@/components/reports/status-badge';
-import { BASE_CURRENCY } from '@/lib/constants';
 import { getReports, getReportsCount } from '@/lib/data/reports';
 import { NotebookText } from 'lucide-react';
 import Link from 'next/link';
@@ -13,15 +12,9 @@ import { PaginationWrapper } from '../layout/pagination-wrapper';
 import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
-interface ReportsProps {
-  currentPage: number;
-}
-
-export async function Reports({ currentPage }: ReportsProps) {
+export async function Reports({ currentPage }: { currentPage: number }) {
   const limit = 10;
   const [reports, totalCount] = await Promise.all([getReports({ page: currentPage, limit }), getReportsCount()]);
-
-  // Pagination calculations
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
@@ -75,7 +68,6 @@ export async function Reports({ currentPage }: ReportsProps) {
         </Table>
       )}
 
-      {/* Pagination */}
       {reports.length > 0 && <PaginationWrapper currentPage={currentPage} totalPages={totalPages} baseUrl='/reports' />}
     </div>
   );
