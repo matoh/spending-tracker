@@ -1,4 +1,4 @@
-import { AccountDropdown } from '@/components/account-dropdown';
+import { AccountDropdown } from '@/components/account/account-dropdown';
 import { MobileSidebarSheet } from '@/components/layout/sidebar/mobile-sidebar-sheet';
 import { Sidebar } from '@/components/layout/sidebar/sidebar';
 import { ReactElement, ReactNode } from 'react';

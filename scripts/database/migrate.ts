@@ -1,4 +1,4 @@
-import { migrate, MigrationDirection } from '../database/Migrations';
+import { migrate, MigrationDirection } from '../../database/Migrations';
 
 async function main(direction: MigrationDirection) {
   const migrationResult = await migrate(direction);

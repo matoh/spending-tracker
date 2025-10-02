@@ -10,6 +10,13 @@ export interface ReportFilters {
   limit?: number;
 }
 
+/**
+ * Get the reports
+ * @param status - The status of the reports
+ * @param page - The page number
+ * @param limit - The limit of reports per page
+ * @returns The reports
+ */
 export async function getReports({ status, page = 1, limit = 50 }: ReportFilters = {}): Promise<
   (Selectable<Reports> & { total_amount: number })[]
 > {
@@ -46,6 +53,11 @@ export async function getReports({ status, page = 1, limit = 50 }: ReportFilters
   }
 }
 
+/**
+ * Get the count of reports
+ * @param status - The status of the reports
+ * @returns The count of reports
+ */
 export async function getReportsCount({ status }: { status?: typeof ReportStatus } = {}): Promise<number> {
   noStore();
   const db = kyselyConnection();
@@ -65,6 +77,11 @@ export async function getReportsCount({ status }: { status?: typeof ReportStatus
   }
 }
 
+/**
+ * Get the report by id
+ * @param reportId - The report id
+ * @returns The report
+ */
 export async function getReportById(reportId: number): Promise<(Selectable<Reports> & { total_amount: number }) | undefined> {
   noStore();
   const db = kyselyConnection();
@@ -92,6 +109,11 @@ export async function getReportById(reportId: number): Promise<(Selectable<Repor
   }
 }
 
+/**
+ * Get the report by name
+ * @param reportName - The report name
+ * @returns The report
+ */
 export async function getReportByName(reportName: string): Promise<Selectable<Reports> | undefined> {
   noStore();
   const db = kyselyConnection();

@@ -9,6 +9,13 @@ export interface ExpenseFilters {
   limit?: number;
 }
 
+/**
+ * Get the expenses
+ * @param reportId - The report id to filter by
+ * @param page - The page number
+ * @param limit - The limit of expenses per page
+ * @returns The expenses
+ */
 export async function getExpenses({ reportId, page = 1, limit = 50 }: ExpenseFilters): Promise<Selectable<Expenses>[]> {
   noStore();
   const db = kyselyConnection();
@@ -28,6 +35,11 @@ export async function getExpenses({ reportId, page = 1, limit = 50 }: ExpenseFil
   }
 }
 
+/**
+ * Get the count of expenses
+ * @param reportId - The report id to filter by
+ * @returns The count of expenses
+ */
 export async function getExpensesCount(reportId?: number): Promise<number> {
   noStore();
   const db = kyselyConnection();
@@ -44,18 +56,6 @@ export async function getExpensesCount(reportId?: number): Promise<number> {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch expenses count.');
-  }
-}
-
-export async function getExpenseById(id: number): Promise<Selectable<Expenses> | undefined> {
-  noStore();
-  const db = kyselyConnection();
-
-  try {
-    return await db.selectFrom('expenses').selectAll().where('id', '=', id).executeTakeFirst();
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch expense data.');
   }
 }
 

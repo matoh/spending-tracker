@@ -2,6 +2,9 @@
 
 import { kyselyConnection as db } from '@/database/Database';
 
+/**
+ * The response from the exchange rate API
+ */
 interface ExchangeRateResponse {
   success: boolean;
   rates?: Record<string, number>;
@@ -10,6 +13,9 @@ interface ExchangeRateResponse {
 
 /**
  * Fetch exchange rate from external API
+ * @param fromCurrency - The currency to convert from
+ * @param toCurrency - The currency to convert to
+ * @returns The exchange rate
  */
 async function fetchExchangeRate(fromCurrency: string, toCurrency: string): Promise<number | null> {
   try {
@@ -34,6 +40,9 @@ async function fetchExchangeRate(fromCurrency: string, toCurrency: string): Prom
 
 /**
  * Get exchange rate from cache or fetch from API
+ * @param fromCurrency - The currency to convert from
+ * @param toCurrency - The currency to convert to
+ * @returns The exchange rate
  */
 export async function getExchangeRate(fromCurrency: string, toCurrency: string): Promise<number | null> {
   // If same currency, return 1
@@ -82,6 +91,10 @@ export async function getExchangeRate(fromCurrency: string, toCurrency: string):
 
 /**
  * Convert amount from one currency to another
+ * @param amount - The amount to convert
+ * @param fromCurrency - The currency to convert from
+ * @param toCurrency - The currency to convert to
+ * @returns The converted amount and rate
  */
 export async function convertCurrency(
   amount: number, 

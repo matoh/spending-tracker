@@ -9,7 +9,8 @@ import { BASE_CURRENCY } from '../constants';
 
 /**
  * Create expense from the form data
- * @param formData
+ * @param formData - The form data to create the expense from
+ * @returns The action response
  */
 export async function createExpense(formData: ExpenseSchema): Promise<ActionResponse> {
   const validatedFields = expenseSchema.safeParse(formData);
@@ -59,7 +60,8 @@ export async function createExpense(formData: ExpenseSchema): Promise<ActionResp
 /**
  * Create expense from the form data
  * @param expenseId
- * @param formData
+ * @param formData - The form data to update the expense from
+ * @returns The action response
  */
 export async function updateExpense(expenseId: number, formData: ExpenseSchema): Promise<ActionResponse> {
   const validatedFields = expenseSchema.safeParse(formData);
@@ -109,7 +111,8 @@ export async function updateExpense(expenseId: number, formData: ExpenseSchema):
 
 /**
  * Delete expense by expense id
- * @param expenseId
+ * @param expenseId - The id of the expense to delete
+ * @returns The action response
  */
 export async function deleteExpense(expenseId: number): Promise<ActionResponse> {
   try {
@@ -136,7 +139,8 @@ export async function deleteExpense(expenseId: number): Promise<ActionResponse> 
 
 /**
  * Create multiple expenses from the form data
- * @param formData
+ * @param formData - The form data to create the expenses from
+ * @returns The action response
  */
 export async function createBulkExpenses(formData: BulkExpenseSchema): Promise<ActionResponse> {
   const validatedFields = bulkExpenseSchema.safeParse(formData);

@@ -1,10 +1,10 @@
-Spending tracker is a comprehensive web application designed to help manage expenses with ease. It allows you to track, categorize, and visualize financial data across multiple currencies, making it simple to stay on top of your spending habits and generate detailed reports.
+Spending tracker is a web application designed to help manage expenses with ease. It allows you to track, categorize, and visualize financial data across multiple currencies, making it simple to stay on top of your spending habits and create reports.
 
 ## Features
 
 ### 💰 Expense Management
-- **Add Expenses**: Create individual expenses with merchant, amount, category, description, and date
-- **Bulk Import**: Import expenses from CSV (Expesify) files for easy data migration
+- **Add Expenses**: Create expenses with merchant, amount, category, description, and date
+- **Bulk Import**: Import expenses from CSV (Expesify) files for data migration
 - **Multi-Currency Support**: Track expenses in multiple currencies (SEK, EUR, PLN, DKK) with automatic conversion
 - **Expense Categories**: Organize expenses across 10 predefined categories:
   - Benefits, Car, Fees, Insurance, Materials, Meals, Professional Services, Rent, Travel, Utilities
@@ -17,12 +17,12 @@ Spending tracker is a comprehensive web application designed to help manage expe
   - Category breakdown (pie charts)
   - Year-over-year comparisons
 - **Spending Insights**: Analytics and spending patterns
-- **Year Selection**: Filter data by specific years for focused analysis
+- **Year Selection**: Filter data by specific years for detailed analysis
 
 ### 📋 Report Management
-- **Create Reports**: Generate custom expense reports with open/closed status
+- **Create Reports**: Create expense reports
 - **Report Details**: View expense breakdowns by category
-- **Status Tracking**: Track report status (open/closed) with visual indicators
+- **Status Tracking**: Track report status (open/closed)
 
 ### 🌍 Multi-Currency & Exchange Rates
 - **Real-time Exchange Rates**: Automatic currency conversion using external APIs
@@ -141,6 +141,16 @@ Following services are included:
 * **postgresql**: PostgreSQL database with persistent volume
 * **postgresql-adminer**: PHP tool for managing content in databases, hosted on: http://localhost:8081/
 
+
+## Environment Setup
+
+Before running the application, you need to create a `.env` file by copying the example file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit the `.env` file with your specific configuration values.
 
 ## Project Structure
 

@@ -20,6 +20,11 @@ export interface YearOverYearData {
   expense_count: number;
 }
 
+/**
+ * Get the monthly spending trend
+ * @param year - The year to get the monthly spending trend for
+ * @returns The monthly spending trend
+ */
 export async function getMonthlySpendingTrend(year: number): Promise<MonthlySpendingData[]> {
   noStore();
   const db = kyselyConnection();
@@ -52,6 +57,11 @@ export async function getMonthlySpendingTrend(year: number): Promise<MonthlySpen
   }
 }
 
+/**
+ * Get the category breakdown
+ * @param year - The year to get the category breakdown for
+ * @returns The category breakdown
+ */
 export async function getCategoryBreakdown(year: number): Promise<CategoryBreakdownData[]> {
   noStore();
   const db = kyselyConnection();
@@ -80,6 +90,10 @@ export async function getCategoryBreakdown(year: number): Promise<CategoryBreakd
   }
 }
 
+/**
+ * Get the year over year comparison
+ * @returns The year over year comparison
+ */
 export async function getYearOverYearComparison(): Promise<YearOverYearData[]> {
   noStore();
   const db = kyselyConnection();
@@ -103,6 +117,11 @@ export async function getYearOverYearComparison(): Promise<YearOverYearData[]> {
   }
 }
 
+/**
+ * Get the total spending for a year
+ * @param year - The year to get the total spending for
+ * @returns The total spending
+ */
 export async function getTotalSpendingForYear(year: number): Promise<number> {
   noStore();
   const db = kyselyConnection();
@@ -133,6 +152,11 @@ export interface AnalyticsData {
   averageSpending: number;
 }
 
+/**
+ * Get the analytics data
+ * @param year - The year to get the analytics data for
+ * @returns The analytics data
+ */
 export async function getAnalyticsData(year: number): Promise<AnalyticsData> {
   noStore();
 

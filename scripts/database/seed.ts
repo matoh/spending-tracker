@@ -1,5 +1,5 @@
-import { kyselyConnection } from '../database/Database';
-import { expenses } from '../database/seeders/expenses';
+import { kyselyConnection } from '../../database/Database';
+import { expenses } from '../../database/seeders/expenses';
 
 async function main() {
   const db = kyselyConnection();

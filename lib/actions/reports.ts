@@ -7,7 +7,8 @@ import { revalidatePath } from 'next/cache';
 
 /**
  * Create report from the form data
- * @param formData
+ * @param formData - The form data to create the report from
+ * @returns The action response
  */
 export async function createReport(formData: ReportSchema): Promise<ActionResponse> {
   const validatedFields = reportSchema.safeParse(formData);
@@ -40,7 +41,8 @@ export async function createReport(formData: ReportSchema): Promise<ActionRespon
 /**
  * Update report from the form data
  * @param reportId
- * @param formData
+ * @param formData - The form data to update the report from
+ * @returns The action response
  */
 export async function updateReport(reportId: number, formData: ReportSchema): Promise<ActionResponse> {
   const validatedFields = reportSchema.safeParse(formData);
@@ -54,11 +56,7 @@ export async function updateReport(reportId: number, formData: ReportSchema): Pr
   }
 
   try {
-    const updateResult = await db()
-      .updateTable('reports')
-      .set(formData)
-      .where('id', '=', Number(reportId))
-      .executeTakeFirst();
+    const updateResult = await db().updateTable('reports').set(formData).where('id', '=', Number(reportId)).executeTakeFirst();
 
     revalidatePath('/reports');
 
@@ -82,7 +80,8 @@ export async function updateReport(reportId: number, formData: ReportSchema): Pr
 
 /**
  * Delete report by report id
- * @param reportId
+ * @param reportId - The id of the report to delete
+ * @returns The action response
  */
 export async function deleteReport(reportId: number): Promise<ActionResponse> {
   try {
