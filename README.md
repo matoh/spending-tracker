@@ -1,5 +1,13 @@
 Spending tracker is a web application designed to help manage expenses with ease. It allows you to track, categorize, and visualize financial data across multiple currencies, making it simple to stay on top of your spending habits and create reports.
 
+## Screenshots
+
+### Dashboard (Light Theme)
+<img src="./readme_assets/spending-tracker-dashboard-light.png" alt="Dashboard Light Theme" width="600" />
+
+### Dashboard (Dark Theme)
+<img src="./readme_assets/spending-tracker-dashboard-dark.png" alt="Dashboard Dark Theme" width="600" />
+
 ## Features
 
 ### 💰 Expense Management

@@ -2,7 +2,8 @@ version: "3.9"
 services:
   postgresql:
     build: hosting/database/postresql
-    network_mode: host
+    ports:
+      - "5432:5432"
     volumes:
       - postgresql-volume:/var/lib/postgresql/data
     environment:
@@ -13,9 +14,10 @@ services:
     depends_on:
       - postgresql
     build: hosting/database/adminer
-    network_mode: host
+    ports:
+      - "8081:8081"
     environment:
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: postgresql
       POSTGRES_DB: spending_tracker
       POSTGRES_PASSWORD: password
       POSTGRES_USER: root
